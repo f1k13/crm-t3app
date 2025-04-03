@@ -1,5 +1,4 @@
 "use client";
-
 import { HeroUIProvider } from "@heroui/react";
 import type { ReactNode } from "react";
 
