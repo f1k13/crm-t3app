@@ -8,6 +8,13 @@
       "when": 1743611416349,
       "tag": "0000_flowery_dracula",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1743795986033,
+      "tag": "0001_slippery_elektra",
+      "breakpoints": true
     }
   ]
 }

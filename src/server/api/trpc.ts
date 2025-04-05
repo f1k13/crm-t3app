@@ -6,11 +6,16 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
+import jwt from "jsonwebtoken";
 import superjson from "superjson";
 import { ZodError } from "zod";
-
+import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
+import { users } from "../db/schema";
+import { env } from "~/env";
+import type { NextRequest } from "next/server";
+import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 /**
  * 1. CONTEXT
@@ -24,9 +29,16 @@ import { db } from "~/server/db";
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (opts: { headers: Headers }) => {
+
+export const createTRPCContext = async (opts: {
+  headers: Headers;
+  cookies?: ReadonlyRequestCookies;
+  req?: NextRequest;
+}) => {
   return {
     db,
+    cookies: opts.cookies,
+    req: opts.req,
     ...opts,
   };
 };
@@ -95,12 +107,69 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 
   return result;
 });
+const authMiddleware = t.middleware(async ({ ctx, next }) => {
+  try {
+    let token = ctx.cookies?.get("token")?.value;
 
-/**
- * Public (unauthenticated) procedure
- *
- * This is the base piece you use to build new queries and mutations on your tRPC API. It does not
- * guarantee that a user querying is authorized, but you can still access user session data if they
- * are logged in.
- */
+    if (!token && ctx.req) {
+      const authHeader = ctx.req.headers.get("authorization");
+      if (authHeader?.startsWith("Bearer ")) {
+        token = authHeader.split(" ")[1];
+      }
+    }
+
+    if (!token) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Требуется авторизация",
+      });
+    }
+
+    // 2. Верифицируем токен
+    const decoded = jwt.verify(token, env.JWT_SECRET) as { sub: string };
+
+    if (!decoded?.sub) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Неверный токен",
+      });
+    }
+
+    // 3. Проверяем существование пользователя
+    const [user] = await ctx.db
+      .select()
+      .from(users)
+      .where(eq(users.id, decoded.sub));
+
+    if (!user) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Пользователь не найден",
+      });
+    }
+
+    // 4. Добавляем пользователя в контекст
+    return next({
+      ctx: {
+        user, // Добавляем полные данные пользователя
+        userId: decoded.sub,
+        ...ctx,
+      },
+    });
+  } catch (err) {
+    console.error("Authentication error:", err);
+
+    if (err instanceof TRPCError) {
+      throw err;
+    }
+
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Ошибка авторизации",
+      cause: err,
+    });
+  }
+});
+
+export const protectedProcedure = t.procedure.use(authMiddleware);
 export const publicProcedure = t.procedure.use(timingMiddleware);

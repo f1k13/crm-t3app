@@ -15,7 +15,7 @@ import { createQueryClient } from "./query-client";
 const createContext = cache(async () => {
   const heads = new Headers(await headers());
   heads.set("x-trpc-source", "rsc");
-
+  heads.set("Access-Control-Allow-Credentials", "true");
   return createTRPCContext({
     headers: heads,
   });

@@ -1,17 +1,16 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
+import { cookies } from "next/headers";
 import { type NextRequest } from "next/server";
 
 import { env } from "~/env";
 import { appRouter } from "~/server/api/root";
 import { createTRPCContext } from "~/server/api/trpc";
 
-/**
- * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
- * handling a HTTP request (e.g. when you make requests from Client Components).
- */
 const createContext = async (req: NextRequest) => {
+  const cookieStore = await cookies();
   return createTRPCContext({
     headers: req.headers,
+    cookies: cookieStore,
   });
 };
 
@@ -29,6 +28,15 @@ const handler = (req: NextRequest) =>
             );
           }
         : undefined,
+
+    responseMeta() {
+      return {
+        headers: {
+          "Access-Control-Allow-Origin": req.headers.get("origin") ?? "*",
+          "Access-Control-Allow-Credentials": "true",
+        },
+      };
+    },
   });
 
 export { handler as GET, handler as POST };
