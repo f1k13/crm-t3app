@@ -1,13 +1,12 @@
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { api } from "~/trpc/react";
 
 export function useSession() {
   const router = useRouter();
-  const user = api.user.getSelf.useQuery(undefined, {});
-  if (!user) {
-    router.push("/auth/sign-in");
-  }
+  const { data, error } = api.user.getSelf.useQuery(undefined, {});
+
   return {
-    user: user.data,
+    user: data,
   };
 }

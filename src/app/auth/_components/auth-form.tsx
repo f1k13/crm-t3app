@@ -1,43 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import { api } from "~/trpc/react";
-
+import { Button, Form } from "@heroui/react";
+import { useForm } from "react-hook-form";
+import { useAuth } from "~/shared/hooks/use-auth";
+import FieldLogin from "~/widgets/auth/ui/field-login";
+import FieldPassword from "~/widgets/auth/ui/field-password";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { authSchema, type IAuthType } from "~/entities/auth/model/auth.model";
 const AuthForm = () => {
-  const utils = api.useUtils();
-  const [login, setLogin] = useState("");
-
-  const [password, setPassword] = useState("");
-
-  const signIn = api.auth.signUp.useMutation({
-    onSuccess: async (data) => {
-      await utils.auth.invalidate();
-      setLogin("");
-      document.cookie = `token=${data.token}; path=/`;
-      console.log("Current cookies:", document.cookie);
-      setPassword("");
+  const form = useForm({
+    resolver: zodResolver(authSchema),
+    defaultValues: {
+      login: "",
+      password: "",
     },
   });
-  console.log(signIn);
+
+  const signIn = useAuth();
+
+  const onSubmit = (data: IAuthType) => {
+    signIn.mutate(data);
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        signIn.mutate({ login, password });
-      }}
-    >
-      <input
-        value={login}
-        onChange={(e) => setLogin(e.target.value)}
-        placeholder="LOGIN"
-      />
-      <input
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="PASS"
-      />
-      <button type={"submit"}>отправить</button>
-    </form>
+    <Form onSubmit={form.handleSubmit(onSubmit)}>
+      <FieldLogin {...form} />
+      <FieldPassword {...form} />
+      <Button color={"primary"} className={"w-full"} type={"submit"}>
+        Войти
+      </Button>
+    </Form>
   );
 };
 
