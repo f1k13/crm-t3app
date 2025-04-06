@@ -18,7 +18,7 @@ const ListSidebar = ({ list }: { list: TSidebar[] }) => {
             color={path === link ? "primary" : "default"}
           >
             {icon}
-            <span className={"text-"}>{title}</span>
+            <span>{title}</span>
           </Button>
         </Link>
       ))}

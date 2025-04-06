@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 import { adminSideBar } from "~/widgets/sidebar/model/sidebar";
-import AdminSidebar from "~/widgets/sidebar/ui/sidebar";
+import Sidebar from "~/widgets/sidebar/ui/sidebar";
 
 const AdminLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className={"flex h-screen w-screen items-start justify-between"}>
-      <AdminSidebar list={adminSideBar} />
-      {children}
+    <div className={"flex h-screen w-screen items-start"}>
+      <Sidebar list={adminSideBar} />
+      <div className={"px-4 py-6"}>{children}</div>
     </div>
   );
 };

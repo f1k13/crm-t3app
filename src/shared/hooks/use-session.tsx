@@ -1,16 +1,24 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { api } from "~/trpc/react";
 
 export function useSession() {
   const router = useRouter();
-  const { data, error } = api.user.getSelf.useQuery(undefined, {});
+  const { data, isLoading } = api.user.getSelf.useQuery(undefined, {
+    retry: false,
+  });
+
   useEffect(() => {
-    if (!data) {
-      router.push("/auth/sign-in");
+    if (!isLoading && !data) {
+      router.replace("/auth/sign-in");
     }
-  }, [data, error]);
+  }, [data, isLoading, router]);
+
   return {
     user: data,
+    isLoading,
+    isAuthenticated: Boolean(data),
   };
 }

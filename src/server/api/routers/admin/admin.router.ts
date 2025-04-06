@@ -3,4 +3,5 @@ import { createTRPCRouter } from "../../trpc";
 
 export const adminRouter = createTRPCRouter({
   createUser: userService.create,
+  getAllUser: userService.getAll,
 });

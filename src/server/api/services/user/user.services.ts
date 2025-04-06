@@ -3,10 +3,22 @@ import { protectedAdminProcedure, protectedProcedure } from "../../trpc";
 import { getAllSchema, userDataSchema } from "../../dto/user/user.dto";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
+import { TRPCError } from "@trpc/server";
 const create = protectedAdminProcedure
   .input(userDataSchema)
   .mutation(async ({ ctx, input }) => {
     const password = await bcrypt.hash(input.password, 10);
+
+    const [user] = await ctx.db
+      .select()
+      .from(users)
+      .where((it) => eq(it.login, input.login));
+    if (user) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Пользователь уже есть в системе",
+      });
+    }
     await ctx.db.insert(users).values({
       ...input,
       password,

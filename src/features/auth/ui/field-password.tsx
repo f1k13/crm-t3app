@@ -2,7 +2,7 @@ import { Input } from "@heroui/react";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
-import type { IAuthType } from "~/entities/auth/model/auth.model";
+import type { IAuthType } from "~/entities/user/model/user.model";
 
 const FieldPassword = ({ ...rest }: UseFormReturn<IAuthType>) => {
   const error = rest.formState.errors.password?.message;

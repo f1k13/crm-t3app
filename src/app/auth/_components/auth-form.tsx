@@ -1,12 +1,12 @@
 "use client";
 
-import { Button, Form } from "@heroui/react";
+import { Button, Form, Spinner } from "@heroui/react";
 import { useForm } from "react-hook-form";
-import FieldLogin from "~/widgets/auth/ui/field-login";
-import FieldPassword from "~/widgets/auth/ui/field-password";
+
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authSchema, type IAuthType } from "~/entities/auth/model/auth.model";
-import { useAuth } from "~/widgets/auth/hooks/use-auth";
+import { useAuth } from "~/features/auth/hooks/use-auth";
+import { FieldLogin, FieldPassword } from "~/features/auth/ui";
+import { authSchema, type IAuthType } from "~/entities/user/model/user.model";
 const AuthForm = () => {
   const form = useForm({
     resolver: zodResolver(authSchema),
@@ -27,7 +27,7 @@ const AuthForm = () => {
       <FieldLogin {...form} />
       <FieldPassword {...form} />
       <Button color={"primary"} className={"w-full"} type={"submit"}>
-        Войти
+        {signIn.isPending ? <Spinner /> : "Логин"}
       </Button>
     </Form>
   );
