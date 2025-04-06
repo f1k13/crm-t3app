@@ -1,21 +1,23 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@heroui/react";
+import { Switch } from "@heroui/react";
+import { MoonIcon, SunIcon } from "lucide-react";
 
 const ThemeSwitcher = () => {
-  const [theme, setTheme] = useState<string>("light");
+  const [theme, setTheme] = useState<string>("dark");
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
     if (storedTheme) {
       setTheme(storedTheme);
     } else {
-      setTheme("light");
+      setTheme("dark");
     }
   }, []);
 
-  const toggleTheme = (newTheme: string) => {
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
   };
@@ -31,10 +33,16 @@ const ThemeSwitcher = () => {
   }, [theme]);
 
   return (
-    <>
-      <Button onClick={() => toggleTheme("light")}>Светлая тема</Button>
-      <Button onClick={() => toggleTheme("dark")}>Темная тема</Button>
-    </>
+    <Switch
+      defaultSelected
+      color="success"
+      onChange={toggleTheme}
+      endContent={<MoonIcon />}
+      size="lg"
+      startContent={<SunIcon />}
+    >
+      Темная тема
+    </Switch>
   );
 };
 

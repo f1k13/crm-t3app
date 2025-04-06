@@ -10,7 +10,8 @@ const FieldLogin = ({ ...rest }: UseFormReturn<IAuthType>) => {
       placeholder={"Логин"}
       label={"Введите логин"}
       errorMessage={error}
-      variant={"faded"}
+      isInvalid={!!error}
+      isRequired
     />
   );
 };

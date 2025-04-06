@@ -1,6 +1,6 @@
 import { users } from "~/server/db/schemas/user.schema";
 import { protectedAdminProcedure, protectedProcedure } from "../../trpc";
-import { userDataSchema } from "../../dto/user/user.dto";
+import { getAllSchema, userDataSchema } from "../../dto/user/user.dto";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 const create = protectedAdminProcedure
@@ -21,7 +21,17 @@ const getSelf = protectedProcedure.query(async ({ ctx }) => {
   return user;
 });
 
+const getAll = protectedAdminProcedure
+  .input(getAllSchema)
+  .query(async ({ ctx, input }) => {
+    const { page, limit } = input;
+    const offset = (page - 1) * limit;
+    const all = await ctx.db.select().from(users).limit(limit).offset(offset);
+    return all;
+  });
+
 export const userService = {
   create,
   getSelf,
+  getAll,
 };
