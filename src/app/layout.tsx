@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${geist.variable} light:bg-gray-100 dark:bg-gray-700`}
+      className={`${geist.variable} light:bg-gray-100 dark:bg-gray-500`}
     >
       <body>
         <TRPCReactProvider>

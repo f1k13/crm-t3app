@@ -1,6 +1,4 @@
-import { User } from "@heroui/react";
 import { MonitorCog } from "lucide-react";
-import type { IUser } from "~/entities/user/model/user.model";
 
 const TopSidebar = () => {
   return (

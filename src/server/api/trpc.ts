@@ -8,9 +8,10 @@ import { env } from "~/env";
 import type { NextRequest } from "next/server";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { users } from "../db/schemas/user.schema";
+import type { CreateWSSContextFnOptions } from "@trpc/server/adapters/ws";
 
 export const createTRPCContext = async (opts: {
-  headers: Headers;
+  headers: Headers | CreateWSSContextFnOptions;
   cookies?: ReadonlyRequestCookies;
   req?: NextRequest;
 }) => {
@@ -20,7 +21,7 @@ export const createTRPCContext = async (opts: {
     req: opts.req,
     userId: "",
     role: "",
-    ...opts,
+    headers: opts.headers,
   };
 };
 
