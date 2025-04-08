@@ -2,25 +2,20 @@
 
 import Link from "next/link";
 import type { TSidebar } from "../model/sidebar";
-import { Button } from "@heroui/react";
-import { usePathname } from "next/navigation";
+import { SidebarMenuButton, SidebarMenuItem } from "~/shared/ui/sidebar";
 
 const ListSidebar = ({ list }: { list: TSidebar[] }) => {
-  const path = usePathname();
-
   return (
     <>
-      {list.map(({ title, icon, link }) => (
-        <Link href={link} key={title} className={"w-full"}>
-          <Button
-            className={"flex w-full justify-start"}
-            key={link}
-            color={path === link ? "primary" : "default"}
-          >
-            {icon}
-            <span>{title}</span>
-          </Button>
-        </Link>
+      {list.map((item) => (
+        <SidebarMenuItem key={item.title}>
+          <SidebarMenuButton asChild>
+            <Link href={item.link}>
+              <item.icon className="h-15 w-15" />
+              <span>{item.title}</span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
       ))}
     </>
   );

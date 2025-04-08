@@ -1,42 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import { Switch } from "@heroui/react";
 import { MoonIcon, SunIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 
 const ThemeSwitcher = () => {
-  const [theme, setTheme] = useState<string>("dark");
-
-  useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    if (storedTheme) {
-      setTheme(storedTheme);
-    } else {
-      setTheme("dark");
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-  };
-
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-      document.documentElement.classList.remove("light");
-    } else {
-      document.documentElement.classList.add("light");
-      document.documentElement.classList.remove("dark");
-    }
-  }, [theme]);
-
+  const { theme, setTheme } = useTheme();
   return (
     <Switch
       defaultSelected
       color="success"
-      onChange={toggleTheme}
+      onChange={() => setTheme(theme === "dark" ? "light" : "dark")}
       endContent={<MoonIcon />}
       size="lg"
       startContent={<SunIcon />}

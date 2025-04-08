@@ -1,5 +1,5 @@
 import { ListOrdered, Users } from "lucide-react";
-import type { ReactNode } from "react";
+import type { JSX } from "react";
 import {
   ADMIN_ORDERS_LINK,
   ADMIN_USERS_LINK,
@@ -8,19 +8,19 @@ import {
 
 export type TSidebar = {
   title: string;
-  icon: ReactNode;
+  icon: JSX.ElementType;
   link: string;
 };
 
 export const adminSidebar: TSidebar[] = [
   {
     title: "Пользователи",
-    icon: <Users className="h-5 w-5" />,
+    icon: Users,
     link: ADMIN_USERS_LINK,
   },
   {
     title: "Заказы",
-    icon: <ListOrdered className="h-5 w-5" />,
+    icon: ListOrdered,
     link: ADMIN_ORDERS_LINK,
   },
 ];
@@ -28,7 +28,7 @@ export const adminSidebar: TSidebar[] = [
 export const managerSidebar: TSidebar[] = [
   {
     title: "Заказы",
-    icon: <ListOrdered className="h-5 w-5" />,
+    icon: ListOrdered,
     link: MAIN_ORDERS_LINK,
   },
 ];

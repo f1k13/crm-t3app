@@ -16,13 +16,11 @@ export function useAuth() {
         color: "success",
       });
       document.cookie = `token=${data.token}; path=/`;
-      setTimeout(() => {
-        if (data.user.role === RoleEnum.ADMIN) {
-          router.push(ADMIN_USERS_LINK);
-        } else {
-          router.push(MAIN_LINK);
-        }
-      }, 2000);
+      if (data.user.role === RoleEnum.ADMIN) {
+        router.push(ADMIN_USERS_LINK);
+      } else {
+        router.push(MAIN_LINK);
+      }
     },
     onError: async (data) => {
       addToast({
