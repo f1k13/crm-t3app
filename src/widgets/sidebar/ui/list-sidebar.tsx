@@ -1,17 +1,18 @@
-"use client";
-
 import Link from "next/link";
 import type { TSidebar } from "../model/sidebar";
 import { SidebarMenuButton, SidebarMenuItem } from "~/shared/ui/sidebar";
+import { usePathname } from "next/navigation";
 
 const ListSidebar = ({ list }: { list: TSidebar[] }) => {
+  const path = usePathname();
+
   return (
     <>
       {list.map((item) => (
         <SidebarMenuItem key={item.title}>
-          <SidebarMenuButton asChild>
-            <Link href={item.link}>
-              <item.icon className="h-15 w-15" />
+          <SidebarMenuButton size={"lg"} isActive={item.link === path}>
+            <Link className={"flex items-center gap-2"} href={item.link}>
+              <item.icon />
               <span>{item.title}</span>
             </Link>
           </SidebarMenuButton>

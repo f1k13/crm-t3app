@@ -24,8 +24,14 @@ const AuthForm = () => {
 
   return (
     <Form onSubmit={form.handleSubmit(onSubmit)}>
-      <FieldLogin {...form} />
-      <FieldPassword {...form} />
+      <FieldLogin
+        register={form.register("login")}
+        error={form.formState.errors.login?.message}
+      />
+      <FieldPassword
+        register={form.register("password")}
+        error={form.formState.errors.password?.message}
+      />
       <Button color={"primary"} className={"w-full"} type={"submit"}>
         {signIn.isPending ? <Spinner /> : "Логин"}
       </Button>

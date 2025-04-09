@@ -7,9 +7,10 @@ import { useSession } from "~/shared/hooks/use-session";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
 } from "~/shared/ui/sidebar";
 import { adminSidebar } from "~/widgets/sidebar/model/sidebar";
@@ -29,17 +30,19 @@ const AppSidebar = () => {
 
   return (
     <Sidebar>
+      <SidebarHeader>
+        <TopSidebar />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>
-            <TopSidebar />
-          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>{renderMenu}</SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <ThemeSwitcher />
+      <SidebarFooter>
+        <ThemeSwitcher />
+      </SidebarFooter>
     </Sidebar>
   );
 };

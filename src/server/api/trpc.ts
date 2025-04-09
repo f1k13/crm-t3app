@@ -9,6 +9,7 @@ import type { NextRequest } from "next/server";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 import { users } from "../db/schemas/user.schema";
 import type { CreateWSSContextFnOptions } from "@trpc/server/adapters/ws";
+import { RoleEnum } from "./enums/role-enum";
 
 export const createTRPCContext = async (opts: {
   headers: Headers | CreateWSSContextFnOptions;
@@ -29,7 +30,7 @@ export type TContext = Awaited<ReturnType<typeof createTRPCContext>>;
 
 interface IAuthContext extends TContext {
   userId: string;
-  role: string;
+  role: RoleEnum;
 }
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
@@ -128,9 +129,9 @@ const authMiddleware = t.middleware<IAuthContext>(async ({ ctx, next }) => {
 });
 
 const adminMiddleware = t.middleware<IAuthContext>(async ({ ctx, next }) => {
-  const role = ctx.role;
+  const role = ctx.role as RoleEnum;
 
-  if (role !== "admin") {
+  if (role !== RoleEnum.ADMIN) {
     throw new TRPCError({
       code: "FORBIDDEN",
       message: "Недостаточно прав для выполнения данной операции",

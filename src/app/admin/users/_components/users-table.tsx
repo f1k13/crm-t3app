@@ -12,10 +12,10 @@ import { useGetAll } from "~/entities/user/hooks/use-get-all";
 import { userFields } from "~/entities/user/model/user.model";
 
 const UsersTable = () => {
-  const { data, isLoading } = useGetAll({ page: 1, limit: 10 });
+  const { data } = useGetAll({ page: 1, limit: 10 });
   const users = userAdapter(data ?? []);
   return (
-    <Table>
+    <Table className={"dark:light:bg-default-400"}>
       <TableHeader columns={userFields}>
         {(it) => <TableColumn key={it.key}>{it.label}</TableColumn>}
       </TableHeader>

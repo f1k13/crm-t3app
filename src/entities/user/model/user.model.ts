@@ -8,10 +8,18 @@ export const authSchema = z.object({
 
 export type IAuthType = z.infer<typeof authSchema>;
 
-export const userCreateSchema = z.object({
-  login: z.string().min(1, "Логин обязателен"),
-  password: z.string().min(1, "Пароль обязателен"),
-  role: z.enum([RoleEnum.ADMIN, RoleEnum.MANAGER]).default(RoleEnum.MANAGER),
+export const userCreateSchema = authSchema.extend({
+  email: z
+    .string()
+    .min(1, "Email обязателен")
+    .regex(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Некорректный email",
+    ),
+  firstName: z.string().min(1, "Имя обязательно"),
+  middleName: z.string().min(1, "Фамилия обязательна"),
+  lastName: z.string(),
+  role: z.enum([RoleEnum.ADMIN, RoleEnum.RKM, RoleEnum.KM]),
 });
 
 export type TUserCreateType = z.infer<typeof userCreateSchema>;
@@ -22,8 +30,12 @@ export const roleData = [
     label: "Админ",
   },
   {
-    key: RoleEnum.MANAGER,
+    key: RoleEnum.KM,
     label: "Менеджер",
+  },
+  {
+    key: RoleEnum.RKM,
+    label: "Руководитель отдела",
   },
 ];
 

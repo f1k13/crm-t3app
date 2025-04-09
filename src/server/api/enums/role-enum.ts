@@ -1,4 +1,5 @@
 export enum RoleEnum {
   ADMIN = "admin",
-  MANAGER = "manager",
+  KM = "clientManager",
+  RKM = "supervisorClientManager",
 }

@@ -9,14 +9,12 @@ const ThemeSwitcher = () => {
   return (
     <Switch
       defaultSelected
-      color="success"
+      color={"secondary"}
       onChange={() => setTheme(theme === "dark" ? "light" : "dark")}
       endContent={<MoonIcon />}
       size="lg"
       startContent={<SunIcon />}
-    >
-      Темная тема
-    </Switch>
+    />
   );
 };
 

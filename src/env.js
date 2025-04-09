@@ -8,6 +8,7 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
     JWT_SECRET: z.string().min(1, "JWT SECRET IS REQ"),
+    HOST_LINK: z.string().min(1, "HOST_LINK IS REQ"),
   },
 
   client: {
@@ -18,6 +19,7 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     JWT_SECRET: process.env.JWT_SECREt,
+    HOST_LINK: process.env.HOST_LINK,
   },
 
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,

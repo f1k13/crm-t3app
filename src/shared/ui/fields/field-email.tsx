@@ -1,17 +1,17 @@
 import { Input } from "@heroui/react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 
-type FieldLoginProps = {
+type FieldEmailProps = {
   register: UseFormRegisterReturn;
   error: string | undefined;
 };
 
-const FieldLogin = ({ register, error }: FieldLoginProps) => {
+const FieldEmail = ({ register, error }: FieldEmailProps) => {
   return (
     <Input
       {...register}
-      placeholder="Логин"
-      label="Введите логин"
+      placeholder={"example@gmail.com"}
+      label={"Введите почту"}
       errorMessage={error}
       isInvalid={!!error}
       isRequired
@@ -19,4 +19,4 @@ const FieldLogin = ({ register, error }: FieldLoginProps) => {
   );
 };
 
-export default FieldLogin;
+export default FieldEmail;
