@@ -1,41 +1,23 @@
 import { Button, Form } from "@heroui/react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useCreate } from "~/entities/user/hooks/use-create";
-import {
-  userCreateSchema,
-  type TUserCreateType,
-} from "~/entities/user/model/user.model";
+
 import { FieldLogin, FieldPassword } from "~/features/auth/ui";
 import FieldFirstName from "~/shared/ui/fields/field-firstName";
 import FieldMiddleName from "~/shared/ui/fields/field-middleName";
 import SelectRole from "~/features/user/ui/select-role";
-import { RoleEnum } from "~/server/api/enums/role-enum";
 import FieldEmail from "~/shared/ui/fields/field-email";
 import FieldLastName from "~/shared/ui/fields/field-lastName";
+import type { UseFormReturn } from "react-hook-form";
+import type { TUserCreateType } from "~/entities/user/model/user.model";
 
-const UserCreateForm = () => {
-  const form = useForm({
-    resolver: zodResolver(userCreateSchema),
-    defaultValues: {
-      login: "",
-      password: "",
-      role: RoleEnum.KM,
-      email: "",
-      firstName: "",
-      middleName: "",
-      lastName: "",
-    },
-  });
-
-  const create = useCreate();
-
-  const onSubmit = (data: TUserCreateType) => {
-    create.mutate(data);
-  };
-
+const UserForm = ({
+  handleSubmit,
+  form,
+}: {
+  handleSubmit: (data: TUserCreateType) => void;
+  form: UseFormReturn<TUserCreateType>;
+}) => {
   return (
-    <Form onSubmit={form.handleSubmit(onSubmit)}>
+    <Form onSubmit={form.handleSubmit(handleSubmit)}>
       <FieldLogin
         register={form.register("login")}
         error={form.formState.errors.login?.message}
@@ -71,4 +53,4 @@ const UserCreateForm = () => {
   );
 };
 
-export default UserCreateForm;
+export default UserForm;

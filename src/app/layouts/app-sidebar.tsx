@@ -16,9 +16,10 @@ import {
 import { adminSidebar } from "~/widgets/sidebar/model/sidebar";
 import ListSidebar from "~/widgets/sidebar/ui/list-sidebar";
 import TopSidebar from "~/widgets/sidebar/ui/top-sidebar";
+import AppSidebarSkeleton from "../skeletons/app-sidebar-skeleton";
 
 const AppSidebar = () => {
-  const { user } = useSession();
+  const { user, isLoading } = useSession();
 
   const renderMenu = useMemo(() => {
     switch (user?.role) {
@@ -27,7 +28,6 @@ const AppSidebar = () => {
       }
     }
   }, [user]);
-
   return (
     <Sidebar>
       <SidebarHeader>
@@ -36,7 +36,11 @@ const AppSidebar = () => {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>{renderMenu}</SidebarMenu>
+            {isLoading ? (
+              <AppSidebarSkeleton />
+            ) : (
+              <SidebarMenu>{renderMenu}</SidebarMenu>
+            )}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

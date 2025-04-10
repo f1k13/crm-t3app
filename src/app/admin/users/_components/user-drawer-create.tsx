@@ -1,6 +1,6 @@
 import { Drawer, DrawerBody, DrawerContent, DrawerHeader } from "@heroui/react";
 import React from "react";
-import UserCreateForm from "~/widgets/users/ui/user-create-form";
+import UserCreateForm from "./user-create-form";
 
 const UserDrawerCreate = ({
   isOpen,

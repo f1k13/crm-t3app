@@ -8,7 +8,7 @@ const UserTemplate = ({
   table: ReactNode;
 }) => {
   return (
-    <div className={"flex flex-col gap-14"}>
+    <div className={"flex flex-col items-start gap-14"}>
       {button} <div className={"w-full"}>{table}</div>
     </div>
   );

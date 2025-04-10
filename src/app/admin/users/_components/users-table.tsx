@@ -7,19 +7,15 @@ import {
   TableHeader,
   TableRow,
 } from "@heroui/react";
-import { userAdapter } from "~/entities/user/adapter/user-adapter";
-import { useGetAll } from "~/entities/user/hooks/use-get-all";
-import { userFields } from "~/entities/user/model/user.model";
-
-const UsersTable = () => {
-  const { data } = useGetAll({ page: 1, limit: 10 });
-  const users = userAdapter(data ?? []);
+import { userFields, type IUser } from "~/entities/user/model/user.model";
+type TUserWithKey = IUser & { key: string };
+const UsersTable = ({ users }: { users: TUserWithKey[] }) => {
   return (
     <Table className={"dark:light:bg-default-400"}>
       <TableHeader columns={userFields}>
         {(it) => <TableColumn key={it.key}>{it.label}</TableColumn>}
       </TableHeader>
-      <TableBody items={users}>
+      <TableBody emptyContent={"Пользователей еще нет в системе"} items={users}>
         {(it) => (
           <TableRow key={it.key}>
             {(user) => <TableCell>{getKeyValue(it, user)}</TableCell>}

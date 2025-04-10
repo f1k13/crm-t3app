@@ -48,11 +48,33 @@ export const userFields = [
     key: "role",
     label: "Роль",
   },
+  {
+    key: "email",
+    label: "Email",
+  },
+  {
+    key: "firstName",
+    label: "Имя",
+  },
+  {
+    key: "middleName",
+    label: "Фамилия",
+  },
+  {
+    key: "lastName",
+    label: "Отчество",
+  },
 ];
 
 export interface IUser {
   id: string;
-  role: RoleEnum;
   login: string;
+  password: string;
+  role: RoleEnum;
+  email: string | null;
+  firstName: string | null;
+  middleName: string | null;
+  lastName: string | null;
+  isConfirmed: boolean | null;
   createdAt: Date;
 }
