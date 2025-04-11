@@ -1,31 +1,39 @@
-import { Button, Form } from "@heroui/react";
-
-import { FieldLogin, FieldPassword } from "~/features/auth/ui";
+import { Form } from "@heroui/react";
+import { FieldLogin } from "~/features/auth/ui";
 import FieldFirstName from "~/shared/ui/fields/field-firstName";
 import FieldMiddleName from "~/shared/ui/fields/field-middleName";
 import SelectRole from "~/features/user/ui/select-role";
 import FieldEmail from "~/shared/ui/fields/field-email";
 import FieldLastName from "~/shared/ui/fields/field-lastName";
 import type { UseFormReturn } from "react-hook-form";
-import type { TUserCreateType } from "~/entities/user/model/user.model";
+import type { UserFormValues } from "~/entities/user/model/user.model";
+import type { ReactNode } from "react";
+import { RoleEnum } from "~/server/api/enums/role-enum";
+
+type UserFormProps = {
+  handleSubmit?: (data: UserFormValues) => void;
+  form: UseFormReturn<UserFormValues>;
+  renderPassword?: () => ReactNode;
+  renderButton?: () => ReactNode;
+  requireLogin?: boolean;
+};
 
 const UserForm = ({
   handleSubmit,
   form,
-}: {
-  handleSubmit: (data: TUserCreateType) => void;
-  form: UseFormReturn<TUserCreateType>;
-}) => {
+  renderPassword,
+  renderButton,
+  requireLogin = true,
+}: UserFormProps) => {
   return (
-    <Form onSubmit={form.handleSubmit(handleSubmit)}>
-      <FieldLogin
-        register={form.register("login")}
-        error={form.formState.errors.login?.message}
-      />
-      <FieldPassword
-        register={form.register("password")}
-        error={form.formState.errors.password?.message}
-      />
+    <Form onSubmit={handleSubmit ? form.handleSubmit(handleSubmit) : undefined}>
+      {requireLogin && (
+        <FieldLogin
+          register={form.register("login")}
+          error={form.formState.errors.login?.message}
+        />
+      )}
+      {renderPassword?.()}
       <FieldFirstName
         register={form.register("firstName")}
         error={form.formState.errors.firstName?.message}
@@ -43,12 +51,10 @@ const UserForm = ({
         error={form.formState.errors.email?.message}
       />
       <SelectRole
-        value={form.watch("role")}
+        value={form.watch("role") ?? RoleEnum.KM}
         onClick={(key) => form.setValue("role", key)}
       />
-      <Button color={"primary"} className={"w-full"} type={"submit"}>
-        Создать
-      </Button>
+      {renderButton?.()}
     </Form>
   );
 };

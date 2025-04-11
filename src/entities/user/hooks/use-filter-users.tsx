@@ -14,7 +14,7 @@ export const useFilterUsers = () => {
       setUsers(data.data);
       setTotalCount(data.totalCount);
     }
-  }, [data, setUsers]);
+  }, [data, setTotalCount, setUsers]);
   return {
     data: users,
     isLoading,

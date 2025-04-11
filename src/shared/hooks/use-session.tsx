@@ -8,7 +8,7 @@ import { api } from "~/trpc/react";
 export function useSession() {
   const router = useRouter();
 
-  const setUser = useUserStore((state) => state.setUser);
+  const { setCurrentUser } = useUserStore((state) => state);
 
   const { data, isLoading } = api.user.getSelf.useQuery(undefined, {
     retry: false,
@@ -19,9 +19,9 @@ export function useSession() {
       router.replace("/auth/sign-in");
     }
     if (data) {
-      setUser(data);
+      setCurrentUser(data);
     }
-  }, [data, isLoading, router, setUser]);
+  }, [data, isLoading, router, setCurrentUser]);
 
   return {
     user: data,

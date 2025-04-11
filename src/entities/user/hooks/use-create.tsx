@@ -17,8 +17,7 @@ export const useCreate = ({
       });
       onSuccess(data.link);
     },
-    onError: async (data) => {
-      console.log(data);
+    onError: (data) => {
       addToast({
         title: "Ошибка",
         description: data.message,

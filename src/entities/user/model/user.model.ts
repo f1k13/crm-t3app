@@ -21,8 +21,25 @@ export const userCreateSchema = authSchema.extend({
   lastName: z.string(),
   role: z.enum([RoleEnum.ADMIN, RoleEnum.RKM, RoleEnum.KM]),
 });
-
+export const userEditSchema = z.object({
+  id: z.string().min(1),
+  email: z
+    .string()
+    .min(1, "Email обязателен")
+    .regex(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Некорректный email",
+    ),
+  firstName: z.string().min(1, "Имя обязательно"),
+  middleName: z.string().min(1, "Фамилия обязательна"),
+  lastName: z.string(),
+  role: z.enum([RoleEnum.ADMIN, RoleEnum.RKM, RoleEnum.KM]),
+});
 export type TUserCreateType = z.infer<typeof userCreateSchema>;
+
+export type TUserEditType = z.infer<typeof userEditSchema>;
+
+export type UserFormValues = Partial<TUserCreateType> & Partial<TUserEditType>;
 
 export const roleData = [
   {

@@ -6,9 +6,9 @@ import { Spinner, useDisclosure } from "@heroui/react";
 import UserDrawerCreate from "./_components/user-drawer-create";
 import { userAdapter } from "~/entities/user/adapter/user-adapter";
 import If from "~/features/abstract/if";
-import ButtonModalOpen from "~/features/user/ui/button-modal-open";
 import { useFilterUsers } from "~/entities/user/hooks/use-filter-users";
 import UserTableTopContent from "~/widgets/users/ui/user-table-top-content";
+import UserDrawerEdit from "./_components/user-drawer-edit";
 
 const Page = () => {
   const {
@@ -29,10 +29,12 @@ const Page = () => {
   return (
     <If condition={!isLoading} fallback={<Spinner />}>
       <UserDrawerCreate isOpen={isOpenCreate} onClose={onCloseCreate} />
+      <UserDrawerEdit isOpen={isOpenEdit} onClose={onCloseEdit} />
       <UserTemplate
         table={
           <UsersTable
             topContent={<UserTableTopContent onOpen={onOpenCreate} />}
+            onOpenEdit={onOpenEdit}
             bottomContent={<></>}
             users={users}
           />

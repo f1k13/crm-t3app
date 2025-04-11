@@ -1,8 +1,7 @@
 import { Drawer, DrawerBody, DrawerContent, DrawerHeader } from "@heroui/react";
-import React from "react";
-import UserCreateForm from "./forms/user-create-form";
+import UserEditForm from "./forms/user-edit-form";
 
-const UserDrawerCreate = ({
+const UserDrawerEdit = ({
   isOpen,
   onClose,
 }: {
@@ -14,15 +13,15 @@ const UserDrawerCreate = ({
       <DrawerContent>
         <DrawerHeader>
           <span className={"light:text-default-600"}>
-            Создание пользователя
+            Редактирование пользователя
           </span>
         </DrawerHeader>
         <DrawerBody>
-          <UserCreateForm />
+          <UserEditForm onClose={onClose} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>
   );
 };
 
-export default UserDrawerCreate;
+export default UserDrawerEdit;

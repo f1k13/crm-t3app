@@ -26,6 +26,8 @@ type TState = {
   setPage: (page: number | null) => void;
   totalCount: number;
   setTotalCount: (totalCount: number) => void;
+  currentUser: IUser | null;
+  setCurrentUser: (user: IUser | null) => void;
 };
 
 export const useUserStore = create<TState>((set) => ({
@@ -46,4 +48,6 @@ export const useUserStore = create<TState>((set) => ({
   setPage: (page) => set({ page }),
   totalCount: 0,
   setTotalCount: (totalCount) => set({ totalCount }),
+  currentUser: null,
+  setCurrentUser: (currentUser) => set({ currentUser }),
 }));
