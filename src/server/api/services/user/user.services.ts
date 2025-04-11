@@ -9,7 +9,7 @@ import {
   type getUserByIdSchema,
   type userDataSchema,
 } from "../../dto/user/user.dto";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { TRPCError } from "@trpc/server";
 import type { z } from "zod";
@@ -78,7 +78,11 @@ const getAll = async (ctx: TContext, input: TGetAllUserInput) => {
   const { page, limit } = input;
   const offset = (page - 1) * limit;
   const all = await ctx.db.select().from(users).limit(limit).offset(offset);
-  return all;
+  const countResult = await ctx.db.select({ count: count() }).from(users);
+
+  const totalCount = Number(countResult?.[0]?.count ?? 0);
+
+  return { data: all, totalCount: Number(totalCount) };
 };
 
 const getUserById = async (ctx: TContext, input: TGetUserByIdInput) => {

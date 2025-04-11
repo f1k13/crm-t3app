@@ -3,24 +3,41 @@
 import UserTemplate from "~/app/_templates/user/user-template";
 import UsersTable from "./_components/users-table";
 import { Spinner, useDisclosure } from "@heroui/react";
-import ButtonModalOpen from "~/features/user/ui/button-modal-open";
 import UserDrawerCreate from "./_components/user-drawer-create";
-import { useGetAll } from "~/entities/user/hooks/use-get-all";
 import { userAdapter } from "~/entities/user/adapter/user-adapter";
 import If from "~/features/abstract/if";
+import ButtonModalOpen from "~/features/user/ui/button-modal-open";
+import { useFilterUsers } from "~/entities/user/hooks/use-filter-users";
+import UserTableTopContent from "~/widgets/users/ui/user-table-top-content";
 
 const Page = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenCreate,
+    onOpen: onOpenCreate,
+    onClose: onCloseCreate,
+  } = useDisclosure();
 
-  const { data, isLoading } = useGetAll({ page: 1, limit: 10 });
+  const {
+    isOpen: isOpenEdit,
+    onOpen: onOpenEdit,
+    onClose: onCloseEdit,
+  } = useDisclosure();
+
+  const { data, isLoading } = useFilterUsers();
+
   const users = userAdapter(data ?? []);
-
   return (
     <If condition={!isLoading} fallback={<Spinner />}>
-      <UserDrawerCreate isOpen={isOpen} onClose={onClose} />
+      <UserDrawerCreate isOpen={isOpenCreate} onClose={onCloseCreate} />
       <UserTemplate
-        table={<UsersTable users={users} />}
-        button={<ButtonModalOpen onClick={onOpen} />}
+        table={
+          <UsersTable
+            topContent={<UserTableTopContent onOpen={onOpenCreate} />}
+            bottomContent={<></>}
+            users={users}
+          />
+        }
+        title={"Пользователи"}
       />
     </If>
   );

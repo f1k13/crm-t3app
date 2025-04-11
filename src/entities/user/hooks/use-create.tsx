@@ -10,7 +10,6 @@ export const useCreate = ({
   const create = api.admin.createUser.useMutation({
     onSuccess: async (data) => {
       await utils.admin.invalidate();
-      console.log(data, "Data");
       addToast({
         title: "Успешно",
         description: "Пользователь добавлен в систему",

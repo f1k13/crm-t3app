@@ -64,6 +64,14 @@ export const userFields = [
     key: "lastName",
     label: "Отчество",
   },
+  {
+    key: "createdAt",
+    label: "Дата создания",
+  },
+  {
+    key: "actions",
+    label: "Действия",
+  },
 ];
 
 export interface IUser {
@@ -78,3 +86,9 @@ export interface IUser {
   isConfirmed: boolean | null;
   createdAt: Date;
 }
+
+export const ROLES = {
+  [RoleEnum.ADMIN]: "Админ",
+  [RoleEnum.KM]: "Менеджер",
+  [RoleEnum.RKM]: "Руководитель отдела",
+};

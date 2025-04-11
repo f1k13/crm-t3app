@@ -5,9 +5,9 @@ import { SidebarProvider } from "~/shared/ui/sidebar";
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
     <SidebarProvider>
-      <div className={"flex h-screen w-screen items-start"}>
+      <div className={"flex h-screen w-screen"}>
         <AppSidebar />
-        <div className={"px-4 py-6"}>{children}</div>
+        <div className={"w-full px-4 py-6"}>{children}</div>
       </div>
     </SidebarProvider>
   );

@@ -20,7 +20,7 @@ const signIn = async (ctx: TContext, input: TSignInInput) => {
       code: "BAD_REQUEST",
       message: "Пользователя нет в системе",
     });
-  if (!!user?.isConfirmed) {
+  if (!user?.isConfirmed) {
     throw new TRPCError({
       code: "FORBIDDEN",
       message: "Пользователь не подтвержден",

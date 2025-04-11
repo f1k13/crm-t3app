@@ -17,6 +17,7 @@ import { adminSidebar } from "~/widgets/sidebar/model/sidebar";
 import ListSidebar from "~/widgets/sidebar/ui/list-sidebar";
 import TopSidebar from "~/widgets/sidebar/ui/top-sidebar";
 import AppSidebarSkeleton from "../skeletons/app-sidebar-skeleton";
+import If from "~/features/abstract/if";
 
 const AppSidebar = () => {
   const { user, isLoading } = useSession();
@@ -36,11 +37,9 @@ const AppSidebar = () => {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            {isLoading ? (
-              <AppSidebarSkeleton />
-            ) : (
+            <If fallback={<AppSidebarSkeleton />} condition={!isLoading}>
               <SidebarMenu>{renderMenu}</SidebarMenu>
-            )}
+            </If>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

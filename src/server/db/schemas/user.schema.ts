@@ -16,7 +16,7 @@ export const users = createTable("user", (d) => ({
   lastName: d.text(),
   isConfirmed: d.boolean().default(false),
   createdAt: d
-    .timestamp({ withTimezone: true })
+    .timestamp()
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
 }));

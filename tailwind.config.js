@@ -15,8 +15,6 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -24,10 +22,6 @@ const config = {
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
-        },
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -68,25 +62,24 @@ const config = {
       },
     },
   },
-  darkMode: ["class", "class"],
+  darkMode: ["class"],
   // @ts-ignore
   plugins: [
     heroui({
-      prefix: "heroui", // prefix for themes variables
-      addCommonColors: true, // override common colors (e.g. "blue", "green", "pink").
-      defaultTheme: "light", // default theme from the themes object
-      defaultExtendTheme: "dark", // default theme to extend on custom themes
-      layout: {}, // common layout tokens (applied to all themes)
+      prefix: "heroui",
+      addCommonColors: true,
+      defaultTheme: "light",
+      defaultExtendTheme: "dark",
+      layout: {},
       themes: {
         light: {
-          layout: {}, // light theme layout tokens
-          colors: {}, // light theme colors
+          layout: {},
+          colors: {},
         },
         dark: {
-          layout: {}, // dark theme layout tokens
-          colors: {}, // dark theme colors
+          layout: {},
+          colors: {},
         },
-        // ... custom themes
       },
     }),
     require("tailwindcss-animate"),

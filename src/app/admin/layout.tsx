@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import AdminLayout from "../layouts/admin-layout";
+import MainLayout from "../layouts/main-layout";
 
 const Layout = ({ children }: { children: ReactNode }) => {
-  return <AdminLayout>{children}</AdminLayout>;
+  return <MainLayout>{children}</MainLayout>;
 };
 
 export default Layout;
