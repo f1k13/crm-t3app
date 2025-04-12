@@ -2,8 +2,8 @@ import type { IUser } from "./user.model";
 import { create } from "zustand";
 
 type TSort = {
-  date: string;
-  firstName: string;
+  field: string;
+  order: "asc" | "desc";
 };
 
 type TFilter = {
@@ -15,13 +15,10 @@ type TState = {
   setUser: (user: IUser | null) => void;
   users: IUser[] | null;
   setUsers: (users: IUser[] | null) => void;
-  filter: TFilter | null;
-  sort: {
-    date: string;
-    firstName: string;
-  } | null;
-  setFilter: (filter: TFilter | null) => void;
-  setSort: (sort: TSort | null) => void;
+  filter: TFilter;
+  sort: TSort;
+  setFilter: (filter: TFilter) => void;
+  setSort: (sort: TSort) => void;
   page: number | null;
   setPage: (page: number | null) => void;
   totalCount: number;
@@ -39,8 +36,8 @@ export const useUserStore = create<TState>((set) => ({
     query: "",
   },
   sort: {
-    date: "",
-    firstName: "",
+    field: "createdAt",
+    order: "asc",
   },
   setFilter: (filter) => set({ filter }),
   setSort: (sort) => set({ sort }),

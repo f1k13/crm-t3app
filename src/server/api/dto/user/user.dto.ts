@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { RoleEnum } from "../../enums/role-enum";
+import { SORTABLE_FIELDS } from "~/server/consts/user";
 export const authDataSchema = z.object({
   login: z.string().min(1, "login is req"),
   password: z.string().min(1, "password is req"),
@@ -12,9 +13,23 @@ export const userDataSchema = z.object({
   lastName: z.string(),
   email: z.string(),
 });
+
+const SortableFieldsEnum = z.enum(
+  Object.keys(SORTABLE_FIELDS) as [string, ...string[]],
+);
+
 export const getAllUserSchema = z.object({
   page: z.number().min(1).default(1),
   limit: z.number().min(1).default(10),
+  filter: z.object({
+    query: z.string(),
+  }),
+  sort: z
+    .object({
+      field: SortableFieldsEnum,
+      order: z.enum(["asc", "desc"]),
+    })
+    .optional(),
 });
 export const getUserByIdSchema = z.object({
   id: z.string().min(1),

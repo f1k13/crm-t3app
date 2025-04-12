@@ -64,6 +64,7 @@ export const userFields = [
   {
     key: "role",
     label: "Роль",
+    sortable: true,
   },
   {
     key: "email",
@@ -72,6 +73,7 @@ export const userFields = [
   {
     key: "firstName",
     label: "Имя",
+    sortable: true,
   },
   {
     key: "middleName",
@@ -84,6 +86,7 @@ export const userFields = [
   {
     key: "createdAt",
     label: "Дата создания",
+    sortable: true,
   },
   {
     key: "actions",

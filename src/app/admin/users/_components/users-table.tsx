@@ -1,4 +1,5 @@
 import {
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -6,8 +7,9 @@ import {
   TableHeader,
   TableRow,
   Tooltip,
+  type SortDescriptor,
 } from "@heroui/react";
-import { useCallback, type Key, type ReactNode } from "react";
+import { useCallback, useState, type Key, type ReactNode } from "react";
 import {
   ROLES,
   userFields,
@@ -18,21 +20,22 @@ import { DateTime } from "luxon";
 import { RelativeFlexItemsCenter } from "~/app/_templates/common";
 import { Pencil, Trash2 } from "lucide-react";
 import { useUserStore } from "~/entities/user/model/store";
+import { useFilterUsers } from "~/entities/user/hooks/use-filter-users";
+import { userAdapter } from "~/entities/user/adapter/user-adapter";
 
-type TUserWithKey = IUser & { key: string };
 const UsersTable = ({
-  users,
   topContent,
   bottomContent,
   onOpenEdit,
 }: {
-  users: TUserWithKey[];
   topContent: ReactNode;
   bottomContent: ReactNode;
   onOpenEdit: () => void;
 }) => {
   const { setUser } = useUserStore((state) => state);
-
+  const { data, isLoading } = useFilterUsers();
+  const { setSort } = useUserStore((state) => state);
+  const users = userAdapter(data ?? []);
   const renderCell = useCallback(
     (user: IUser, columnKey: Key) => {
       switch (columnKey) {
@@ -88,17 +91,43 @@ const UsersTable = ({
     },
     [onOpenEdit, setUser],
   );
+  const [sortDes, setSortDes] = useState<SortDescriptor>({
+    column: "createdAt",
+    direction: "descending",
+  });
+
+  const onChangeSort = useCallback(
+    (description: SortDescriptor) => {
+      setSortDes(description);
+      setSort({
+        field: description.column as string,
+        order: description.direction === "ascending" ? "asc" : "desc",
+      });
+    },
+    [setSort],
+  );
 
   return (
     <Table
+      onSortChange={onChangeSort}
       topContent={topContent}
       bottomContent={bottomContent}
+      sortDescriptor={sortDes}
       className={"dark:light:bg-default-400"}
     >
       <TableHeader columns={userFields}>
-        {(it) => <TableColumn key={it.key}>{it.label}</TableColumn>}
+        {(it) => (
+          <TableColumn allowsSorting={it.sortable} key={it.key}>
+            {it.label}
+          </TableColumn>
+        )}
       </TableHeader>
-      <TableBody emptyContent={"Пользователей еще нет в системе"} items={users}>
+      <TableBody
+        isLoading={isLoading}
+        emptyContent={"Пользователей еще нет в системе"}
+        items={users}
+        loadingContent={<Spinner />}
+      >
         {(it) => (
           <TableRow key={it.key}>
             {(user) => <TableCell>{renderCell(it, user)}</TableCell>}

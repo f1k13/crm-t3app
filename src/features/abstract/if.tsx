@@ -7,7 +7,7 @@ const If = ({
 }: {
   children: ReactNode;
   condition: unknown;
-  fallback: ReactNode;
+  fallback?: ReactNode;
 }) => {
   return !!condition ? children : fallback;
 };

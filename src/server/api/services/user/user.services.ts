@@ -9,12 +9,13 @@ import {
   type getUserByIdSchema,
   type userDataSchema,
 } from "../../dto/user/user.dto";
-import { count, eq } from "drizzle-orm";
+import { asc, count, desc, eq, ilike, or } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { TRPCError } from "@trpc/server";
 import type { z } from "zod";
 import { env } from "~/env";
 import jwt from "jsonwebtoken";
+import { SORTABLE_FIELDS, type TSortField } from "~/server/consts/user";
 
 type TCreateUserInput = z.infer<typeof userDataSchema>;
 
@@ -75,14 +76,35 @@ const getSelf = async (ctx: TContext) => {
   return user;
 };
 const getAll = async (ctx: TContext, input: TGetAllUserInput) => {
-  const { page, limit } = input;
+  const { page, limit, filter, sort } = input;
+  console.log(input);
   const offset = (page - 1) * limit;
-  const all = await ctx.db.select().from(users).limit(limit).offset(offset);
-  const countResult = await ctx.db.select({ count: count() }).from(users);
 
+  const whereClause = filter?.query
+    ? or(
+        ilike(users.email, `%${filter.query}%`),
+        ilike(users.firstName, `%${filter.query}%`),
+      )
+    : undefined;
+
+  const orderClause = sort
+    ? sort.order === "asc"
+      ? asc(SORTABLE_FIELDS[sort.field as keyof typeof SORTABLE_FIELDS])
+      : desc(SORTABLE_FIELDS[sort.field as keyof typeof SORTABLE_FIELDS])
+    : undefined;
+
+  const all = await ctx.db
+    .select()
+    .from(users)
+    .where(whereClause)
+    .orderBy(orderClause!)
+    .limit(limit)
+    .offset(offset);
+
+  const countResult = await ctx.db.select({ count: count() }).from(users);
   const totalCount = Number(countResult?.[0]?.count ?? 0);
 
-  return { data: all, totalCount: Number(totalCount) };
+  return { data: all, totalCount };
 };
 
 const getUserById = async (ctx: TContext, input: TGetUserByIdInput) => {

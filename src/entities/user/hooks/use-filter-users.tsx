@@ -5,9 +5,11 @@ import { useUserStore } from "../model/store";
 import { useGetAll } from "./use-get-all";
 
 export const useFilterUsers = () => {
-  const { setUsers, users, setTotalCount } = useUserStore((state) => state);
+  const { setUsers, users, setTotalCount, sort, filter } = useUserStore(
+    (state) => state,
+  );
 
-  const { data, isLoading } = useGetAll({ page: 1, limit: 10 });
+  const { data, isLoading } = useGetAll({ page: 1, limit: 10, sort, filter });
 
   useEffect(() => {
     if (data) {
