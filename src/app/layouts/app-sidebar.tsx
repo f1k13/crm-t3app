@@ -13,7 +13,7 @@ import {
   SidebarHeader,
   SidebarMenu,
 } from "~/shared/ui/sidebar";
-import { adminSidebar } from "~/widgets/sidebar/model/sidebar";
+import { adminSidebar, managerSidebar } from "~/widgets/sidebar/model/sidebar";
 import ListSidebar from "~/widgets/sidebar/ui/list-sidebar";
 import TopSidebar from "~/widgets/sidebar/ui/top-sidebar";
 import AppSidebarSkeleton from "../skeletons/app-sidebar-skeleton";
@@ -26,6 +26,9 @@ const AppSidebar = () => {
     switch (user?.role) {
       case RoleEnum.ADMIN: {
         return <ListSidebar list={adminSidebar} />;
+      }
+      case RoleEnum.KM: {
+        return <ListSidebar list={managerSidebar} />;
       }
     }
   }, [user]);
