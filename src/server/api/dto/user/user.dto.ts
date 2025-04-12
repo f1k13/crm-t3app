@@ -60,3 +60,30 @@ export const verifyUserSchema = z.object({
 export const deleteUsersSchema = z.object({
   userIds: z.array(z.string().min(1)),
 });
+
+export const userIdSchema = z.object({
+  userId: z.string().min(1),
+});
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1),
+  newPassword: z.string().min(1),
+});
+export type TCreateUserInput = z.infer<typeof userDataSchema>;
+
+export type TGetAllUserInput = z.infer<typeof getAllUserSchema>;
+
+export type TGetUserByIdInput = z.infer<typeof getUserByIdSchema>;
+
+export type TEditUserInput = z.infer<typeof editUserSchema>;
+
+export type TConfirmUserInput = z.infer<typeof confirmUserSchema>;
+
+export type TGetUserByLoginInput = z.infer<typeof getUserByLoginSchema>;
+
+export type TVerifyUser = z.infer<typeof verifyUserSchema>;
+
+export type TDeleteUsers = z.infer<typeof deleteUsersSchema>;
+
+export type TUserIdInput = z.infer<typeof userIdSchema>;
+
+export type TUserResetPassword = z.infer<typeof resetPasswordSchema>;

@@ -1,5 +1,5 @@
-import { verifyUserSchema } from "../../dto/user/user.dto";
-import { userService } from "../../services/user/user.services";
+import { userService } from "./../../services/user/user.services";
+import { resetPasswordSchema } from "../../dto/user/user.dto";
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -10,7 +10,7 @@ export const userRouter = createTRPCRouter({
   getSelf: protectedProcedure.query(async ({ ctx }) =>
     userService.getSelf(ctx),
   ),
-  verify: publicProcedure
-    .input(verifyUserSchema)
-    .mutation(async ({ ctx, input }) => userService.authVerify(ctx, input)),
+  resetPassword: publicProcedure
+    .input(resetPasswordSchema)
+    .mutation(async ({ ctx, input }) => userService.resetPassword(ctx, input)),
 });

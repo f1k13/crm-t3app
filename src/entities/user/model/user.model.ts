@@ -112,3 +112,15 @@ export const ROLES = {
   [RoleEnum.KM]: "Менеджер",
   [RoleEnum.RKM]: "Руководитель отдела",
 };
+
+export const userResetPasswordSchema = z
+  .object({
+    newPassword: z.string().min(6, "Пароль должен быть не менее 6 символов"),
+    repeatPassword: z.string(),
+    token: z.string(),
+  })
+  .refine((data) => data.newPassword === data.repeatPassword, {
+    path: ["repeatPassword"],
+    message: "Пароли не совпадают",
+  });
+export type TResetPassword = z.infer<typeof userResetPasswordSchema>;

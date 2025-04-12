@@ -1,10 +1,10 @@
 import { AuthTemplate } from "~/app/_templates/auth";
-import AuthForm from "../_components/auth-form";
+import ResetForm from "../_components/reset-form";
 
 const Page = () => {
   return (
-    <AuthTemplate title={"Логин"}>
-      <AuthForm />
+    <AuthTemplate title={"Изменения пароля"}>
+      <ResetForm />
     </AuthTemplate>
   );
 };

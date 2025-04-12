@@ -3,6 +3,7 @@ import {
   editUserSchema,
   getAllUserSchema,
   userDataSchema,
+  userIdSchema,
 } from "../../dto/user/user.dto";
 import { userService } from "../../services/user/user.services";
 import { createTRPCRouter, protectedAdminProcedure } from "../../trpc";
@@ -20,4 +21,9 @@ export const adminRouter = createTRPCRouter({
   deleteUsers: protectedAdminProcedure
     .input(deleteUsersSchema)
     .mutation(async ({ ctx, input }) => userService.deleteUsers(ctx, input)),
+  resetPasswordUser: protectedAdminProcedure
+    .input(userIdSchema)
+    .mutation(async ({ ctx, input }) =>
+      userService.createLinkResetPassword(ctx, input),
+    ),
 });

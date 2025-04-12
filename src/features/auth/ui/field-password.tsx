@@ -5,14 +5,19 @@ import type { UseFormRegisterReturn } from "react-hook-form";
 type FieldPasswordProps = {
   register: UseFormRegisterReturn;
   error: string | undefined;
+  label?: string;
 };
-const FieldPassword = ({ register, error }: FieldPasswordProps) => {
+const FieldPassword = ({
+  register,
+  error,
+  label = "Введите пароль",
+}: FieldPasswordProps) => {
   const [isVisible, setIsVisible] = useState(true);
   return (
     <Input
       {...register}
       placeholder="Пароль"
-      label="Введите пароль"
+      label={label}
       errorMessage={error}
       type={isVisible ? "text" : "password"}
       isInvalid={!!error}

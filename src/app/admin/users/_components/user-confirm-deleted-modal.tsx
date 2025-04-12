@@ -16,10 +16,15 @@ const UserConfirmDeletedModal = ({
   onClose: () => void;
   isOpen: boolean;
 }) => {
-  const { selectedDeletedUsers } = useUserStore((state) => state);
+  const { selectedDeletedUsers, clearSelectedDeletedUsers } = useUserStore(
+    (state) => state,
+  );
 
   const deleted = useDeleteUsers({
-    onSuccess: onClose,
+    onSuccess: () => {
+      onClose();
+      clearSelectedDeletedUsers();
+    },
   });
 
   return (

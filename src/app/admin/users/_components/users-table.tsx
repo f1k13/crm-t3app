@@ -18,10 +18,11 @@ import {
 
 import { DateTime } from "luxon";
 import { RelativeFlexItemsCenter } from "~/app/_templates/common";
-import { Pencil, Trash2 } from "lucide-react";
+import { Copy, Pencil, Trash2 } from "lucide-react";
 import { useUserStore } from "~/entities/user/model/store";
 import { useFilterUsers } from "~/entities/user/hooks/use-filter-users";
 import { userAdapter } from "~/entities/user/adapter/user-adapter";
+import { useCreateLinkResetPassword } from "~/entities/user/hooks/use-create-link-reset-password";
 
 const UsersTable = ({
   topContent,
@@ -35,7 +36,8 @@ const UsersTable = ({
   const { setUser, setSort, setSelectedDeletedUsers, selectedDeletedUsers } =
     useUserStore((state) => state);
   const { data, isLoading } = useFilterUsers();
-  console.log(selectedDeletedUsers);
+
+  const resetPassword = useCreateLinkResetPassword();
   const users = userAdapter(data ?? []);
   const renderCell = useCallback(
     (user: IUser, columnKey: Key) => {
@@ -70,7 +72,7 @@ const UsersTable = ({
         case "actions": {
           return (
             <RelativeFlexItemsCenter>
-              <Tooltip content={"Редактировать"}>
+              <Tooltip color={"primary"} content={"Редактировать"}>
                 <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
                   <Pencil
                     onClick={() => {
@@ -92,12 +94,29 @@ const UsersTable = ({
                   />
                 </span>
               </Tooltip>
+              <Tooltip color={"primary"} content={"Ссылка для сброса пароля"}>
+                <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
+                  <Copy
+                    onClick={() =>
+                      resetPassword.mutate({
+                        userId: user.id,
+                      })
+                    }
+                  />
+                </span>
+              </Tooltip>
             </RelativeFlexItemsCenter>
           );
         }
       }
     },
-    [onOpenEdit, selectedDeletedUsers, setSelectedDeletedUsers, setUser],
+    [
+      onOpenEdit,
+      resetPassword,
+      selectedDeletedUsers,
+      setSelectedDeletedUsers,
+      setUser,
+    ],
   );
   const [sortDes, setSortDes] = useState<SortDescriptor>({
     column: "createdAt",
