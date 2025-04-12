@@ -32,9 +32,10 @@ const UsersTable = ({
   bottomContent: ReactNode;
   onOpenEdit: () => void;
 }) => {
-  const { setUser } = useUserStore((state) => state);
+  const { setUser, setSort, setSelectedDeletedUsers, selectedDeletedUsers } =
+    useUserStore((state) => state);
   const { data, isLoading } = useFilterUsers();
-  const { setSort } = useUserStore((state) => state);
+  console.log(selectedDeletedUsers);
   const users = userAdapter(data ?? []);
   const renderCell = useCallback(
     (user: IUser, columnKey: Key) => {
@@ -81,7 +82,14 @@ const UsersTable = ({
               </Tooltip>
               <Tooltip color={"danger"} content={"Удалить"}>
                 <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
-                  <Trash2 />
+                  <Trash2
+                    onClick={() => setSelectedDeletedUsers(user.id)}
+                    className={
+                      selectedDeletedUsers.includes(user.id)
+                        ? "text-danger-400"
+                        : "text-default-400"
+                    }
+                  />
                 </span>
               </Tooltip>
             </RelativeFlexItemsCenter>
@@ -89,7 +97,7 @@ const UsersTable = ({
         }
       }
     },
-    [onOpenEdit, setUser],
+    [onOpenEdit, selectedDeletedUsers, setSelectedDeletedUsers, setUser],
   );
   const [sortDes, setSortDes] = useState<SortDescriptor>({
     column: "createdAt",

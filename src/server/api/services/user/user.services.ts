@@ -8,8 +8,9 @@ import {
   type getAllUserSchema,
   type getUserByIdSchema,
   type userDataSchema,
+  deleteUsersSchema,
 } from "../../dto/user/user.dto";
-import { asc, count, desc, eq, ilike, or } from "drizzle-orm";
+import { asc, count, desc, eq, ilike, inArray, or } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import { TRPCError } from "@trpc/server";
 import type { z } from "zod";
@@ -30,6 +31,8 @@ type TConfirmUserInput = z.infer<typeof confirmUserSchema>;
 type TGetUserByLoginInput = z.infer<typeof getUserByLoginSchema>;
 
 type TVerifyUser = z.infer<typeof verifyUserSchema>;
+
+type TDeleteUsers = z.infer<typeof deleteUsersSchema>;
 
 const secretKey = env.JWT_SECRET;
 
@@ -77,7 +80,6 @@ const getSelf = async (ctx: TContext) => {
 };
 const getAll = async (ctx: TContext, input: TGetAllUserInput) => {
   const { page, limit, filter, sort } = input;
-  console.log(input);
   const offset = (page - 1) * limit;
 
   const whereClause = filter?.query
@@ -101,10 +103,22 @@ const getAll = async (ctx: TContext, input: TGetAllUserInput) => {
     .limit(limit)
     .offset(offset);
 
-  const countResult = await ctx.db.select({ count: count() }).from(users);
-  const totalCount = Number(countResult?.[0]?.count ?? 0);
+  const totalCountResult = await ctx.db.select({ count: count() }).from(users);
+  const totalCount = Number(totalCountResult?.[0]?.count ?? 0);
 
-  return { data: all, totalCount };
+  const filteredCountResult = await ctx.db
+    .select({ count: count() })
+    .from(users)
+    .where(whereClause);
+  const filteredCount = Number(filteredCountResult?.[0]?.count ?? 0);
+
+  const totalPages = Math.ceil(filteredCount / limit);
+
+  return {
+    data: all,
+    totalCount,
+    totalPages,
+  };
 };
 
 const getUserById = async (ctx: TContext, input: TGetUserByIdInput) => {
@@ -173,6 +187,14 @@ const setConfirm = async (ctx: TContext, input: TConfirmUserInput) => {
     .where(eq(users.id, input.id));
 };
 
+const deleteUsers = async (ctx: TContext, input: TDeleteUsers) => {
+  const { userIds } = input;
+
+  await ctx.db.delete(users).where(inArray(users.id, userIds));
+
+  return { success: true };
+};
+
 export const userService = {
   create,
   getSelf,
@@ -181,4 +203,5 @@ export const userService = {
   getUserById,
   setConfirm,
   authVerify,
+  deleteUsers,
 };

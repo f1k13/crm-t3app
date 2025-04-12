@@ -6,6 +6,8 @@ import { useDisclosure } from "@heroui/react";
 import UserDrawerCreate from "./_components/user-drawer-create";
 import UserTableTopContent from "~/widgets/users/ui/user-table-top-content";
 import UserDrawerEdit from "./_components/user-drawer-edit";
+import UserTableBottomContent from "~/widgets/users/ui/user-table-bottom-content";
+import UserConfirmDeletedModal from "./_components/user-confirm-deleted-modal";
 
 const Page = () => {
   const {
@@ -19,17 +21,27 @@ const Page = () => {
     onOpen: onOpenEdit,
     onClose: onCloseEdit,
   } = useDisclosure();
-
+  const {
+    onClose: onCloseDelete,
+    onOpen: onOpenDelete,
+    isOpen: isOpenDelete,
+  } = useDisclosure();
   return (
     <>
       <UserDrawerCreate isOpen={isOpenCreate} onClose={onCloseCreate} />
       <UserDrawerEdit isOpen={isOpenEdit} onClose={onCloseEdit} />
+      <UserConfirmDeletedModal isOpen={isOpenDelete} onClose={onCloseDelete} />
       <UserTemplate
         table={
           <UsersTable
-            topContent={<UserTableTopContent onOpen={onOpenCreate} />}
+            topContent={
+              <UserTableTopContent
+                onOpenDelete={onOpenDelete}
+                onOpen={onOpenCreate}
+              />
+            }
             onOpenEdit={onOpenEdit}
-            bottomContent={<></>}
+            bottomContent={<UserTableBottomContent />}
           />
         }
         title={"Пользователи"}

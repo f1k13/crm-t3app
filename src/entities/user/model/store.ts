@@ -25,9 +25,13 @@ type TState = {
   setTotalCount: (totalCount: number) => void;
   currentUser: IUser | null;
   setCurrentUser: (user: IUser | null) => void;
+  totalPages: number;
+  setTotalPages: (totalPages: number) => void;
+  selectedDeletedUsers: IUser["id"][];
+  setSelectedDeletedUsers: (users: IUser["id"]) => void;
 };
 
-export const useUserStore = create<TState>((set) => ({
+export const useUserStore = create<TState>((set, get) => ({
   user: null,
   setUser: (user) => set({ user }),
   users: null,
@@ -41,10 +45,23 @@ export const useUserStore = create<TState>((set) => ({
   },
   setFilter: (filter) => set({ filter }),
   setSort: (sort) => set({ sort }),
-  page: 0,
+  page: 1,
   setPage: (page) => set({ page }),
   totalCount: 0,
   setTotalCount: (totalCount) => set({ totalCount }),
   currentUser: null,
   setCurrentUser: (currentUser) => set({ currentUser }),
+  totalPages: 0,
+  setTotalPages: (totalPages) => set({ totalPages }),
+  selectedDeletedUsers: [],
+  setSelectedDeletedUsers: (user) => {
+    const current = get().selectedDeletedUsers ?? [];
+    const exists = current.find((u) => u === user);
+
+    const updated = exists
+      ? current.filter((u) => u !== user)
+      : [...current, user];
+
+    set({ selectedDeletedUsers: updated ?? [] });
+  },
 }));

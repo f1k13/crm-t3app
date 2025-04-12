@@ -56,3 +56,7 @@ export const confirmUserSchema = z.object({
 export const verifyUserSchema = z.object({
   token: z.string().min(1),
 });
+
+export const deleteUsersSchema = z.object({
+  userIds: z.array(z.string().min(1)),
+});

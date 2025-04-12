@@ -1,4 +1,5 @@
 import {
+  deleteUsersSchema,
   editUserSchema,
   getAllUserSchema,
   userDataSchema,
@@ -16,4 +17,7 @@ export const adminRouter = createTRPCRouter({
   editUser: protectedAdminProcedure
     .input(editUserSchema)
     .mutation(async ({ ctx, input }) => userService.editUser(ctx, input)),
+  deleteUsers: protectedAdminProcedure
+    .input(deleteUsersSchema)
+    .mutation(async ({ ctx, input }) => userService.deleteUsers(ctx, input)),
 });
