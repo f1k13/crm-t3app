@@ -38,4 +38,43 @@ export const companyCreateSchema = z.object({
     .optional(),
 });
 
+export const suggestDaDataCompanySchema = z.object({
+  query: z.string().min(1),
+});
+
+export const phoneNumberCompanySchema = z.object({
+  companyId: z.string().min(1),
+  phoneNumbers: z.array(z.string().min(1)),
+});
+
+export const emailCompanySchema = z.object({
+  companyId: z.string().min(1),
+  phoneNumbers: z.array(z.string().min(1)),
+});
+
+export const messengerCompanySchema = z.object({
+  companyId: z.string().min(1),
+  messengers: z.array(
+    z.object({
+      type: z.string().min(1),
+      contact: z.string().min(1),
+    }),
+  ),
+});
+
+export const contactPersonCompany = z.object({
+  companyId: z.string().min(1),
+  person: z.array(
+    z.object({
+      fullName: z.string().min(1),
+      phone: z.string().min(1),
+      email: z.string().min(1),
+    }),
+  ),
+});
+
 export type TCreateCompanyInput = z.infer<typeof companyCreateSchema>;
+
+export type TCreatePhoneNumberInput = z.infer<typeof phoneNumberCompanySchema>;
+
+export type TSuggestCompanyInput = z.infer<typeof suggestDaDataCompanySchema>;

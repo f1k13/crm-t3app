@@ -18,17 +18,20 @@ export const phoneNumberSchema = createTable("company_phone_number", (d) => ({
   companyId: d.uuid().references(() => companySchema.id),
   phoneNumber: d.text().notNull().unique(),
 }));
+
 export const emailSchema = createTable("company_email", (d) => ({
   id: d.uuid().primaryKey().defaultRandom(),
   companyId: d.uuid().references(() => companySchema.id),
   email: d.text().notNull().unique(),
 }));
+
 export const messengerSchema = createTable("company_messenger", (d) => ({
   id: d.uuid().primaryKey().defaultRandom(),
   companyId: d.uuid().references(() => companySchema.id),
-  type: d.text().notNull(),
+  type: d.integer().notNull(),
   contact: d.text().notNull(),
 }));
+
 export const contactPersonSchema = createTable(
   "company_contact_person",
   (d) => ({
@@ -39,18 +42,21 @@ export const contactPersonSchema = createTable(
     email: d.text().notNull(),
   }),
 );
+
 export const companyRelations = relations(companySchema, ({ many }) => ({
   phoneNumbers: many(phoneNumberSchema),
   emails: many(emailSchema),
   messengers: many(messengerSchema),
   contactPersons: many(contactPersonSchema),
 }));
+
 export const phoneNumberRelations = relations(phoneNumberSchema, ({ one }) => ({
   company: one(companySchema, {
     fields: [phoneNumberSchema.companyId],
     references: [companySchema.id],
   }),
 }));
+
 export const messengerRelations = relations(messengerSchema, ({ one }) => ({
   company: one(companySchema, {
     fields: [messengerSchema.companyId],
@@ -67,6 +73,7 @@ export const contactPersonRelations = relations(
     }),
   }),
 );
+
 export const emailRelations = relations(emailSchema, ({ one }) => ({
   company: one(companySchema, {
     fields: [emailSchema.companyId],

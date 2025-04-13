@@ -24,5 +24,12 @@ export const companyService = {
         message: "Компания с таким именем уже существует",
       });
     }
+    const company = await companyRepository.create(ctx.db, data);
+    if (data.phoneNumbers && data.phoneNumbers?.length > 0 && company) {
+      await companyRepository.createPhoneNumber(ctx.db, {
+        companyId: company.id,
+        phoneNumbers: data.phoneNumbers,
+      });
+    }
   },
 };

@@ -12,7 +12,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (currentUser?.role !== RoleEnum.ADMIN) {
+    if (currentUser && currentUser?.role !== RoleEnum.ADMIN) {
       router.push("/main");
     }
   }, [currentUser, router]);

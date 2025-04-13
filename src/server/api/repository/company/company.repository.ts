@@ -1,5 +1,11 @@
-import { companySchema } from "~/server/db/schemas/company.schema";
-import type { TCreateCompanyInput } from "../../dto/company/company.dto";
+import {
+  companySchema,
+  phoneNumberSchema,
+} from "~/server/db/schemas/company.schema";
+import type {
+  TCreateCompanyInput,
+  TCreatePhoneNumberInput,
+} from "../../dto/company/company.dto";
 import type { TDrizzleDatabase } from "../repository";
 import { eq } from "drizzle-orm";
 
@@ -32,5 +38,17 @@ export const companyRepository = {
       .from(companySchema)
       .where((it) => eq(it.name, name));
     return company;
+  },
+  async createPhoneNumber(db: TDrizzleDatabase, dto: TCreatePhoneNumberInput) {
+    const { companyId, phoneNumbers } = dto;
+    const dataInsert = phoneNumbers.map((it) => ({
+      companyId,
+      phoneNumber: it,
+    }));
+    const data = await db.insert(phoneNumberSchema).values(dataInsert);
+
+    return {
+      data,
+    };
   },
 };
