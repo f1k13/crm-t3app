@@ -11,19 +11,22 @@ import { createTRPCRouter, protectedAdminProcedure } from "../../trpc";
 export const adminRouter = createTRPCRouter({
   createUser: protectedAdminProcedure
     .input(userDataSchema)
-    .mutation(async ({ ctx, input }) => userService.create(ctx, input)),
+    .mutation(async ({ ctx, input }) => await userService.create(ctx, input)),
   getAllUser: protectedAdminProcedure
     .input(getAllUserSchema)
-    .query(async ({ ctx, input }) => userService.getAll(ctx, input)),
+    .query(async ({ ctx, input }) => await userService.getAll(ctx, input)),
   editUser: protectedAdminProcedure
     .input(editUserSchema)
-    .mutation(async ({ ctx, input }) => userService.editUser(ctx, input)),
+    .mutation(async ({ ctx, input }) => await userService.editUser(ctx, input)),
   deleteUsers: protectedAdminProcedure
     .input(deleteUsersSchema)
-    .mutation(async ({ ctx, input }) => userService.deleteUsers(ctx, input)),
+    .mutation(
+      async ({ ctx, input }) => await userService.deleteUsers(ctx, input),
+    ),
   resetPasswordUser: protectedAdminProcedure
     .input(userIdSchema)
-    .mutation(async ({ ctx, input }) =>
-      userService.createLinkResetPassword(ctx, input),
+    .mutation(
+      async ({ ctx, input }) =>
+        await userService.createLinkResetPassword(ctx, input),
     ),
 });

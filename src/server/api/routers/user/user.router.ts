@@ -7,10 +7,12 @@ import {
 } from "../../trpc";
 
 export const userRouter = createTRPCRouter({
-  getSelf: protectedProcedure.query(async ({ ctx }) =>
-    userService.getSelf(ctx),
+  getSelf: protectedProcedure.query(
+    async ({ ctx }) => await userService.getSelf(ctx),
   ),
   resetPassword: publicProcedure
     .input(resetPasswordSchema)
-    .mutation(async ({ ctx, input }) => userService.resetPassword(ctx, input)),
+    .mutation(
+      async ({ ctx, input }) => await userService.resetPassword(ctx, input),
+    ),
 });

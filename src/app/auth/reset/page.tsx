@@ -1,3 +1,5 @@
+"use client";
+
 import { AuthTemplate } from "~/app/_templates/auth";
 import ResetForm from "../_components/reset-form";
 import { Suspense } from "react";

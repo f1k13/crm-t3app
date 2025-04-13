@@ -1,26 +1,28 @@
-import { users } from "~/server/db/schemas/user.schema";
-
 import { asc, count, desc, eq, ilike, inArray, or } from "drizzle-orm";
 
 import { SORTABLE_FIELDS } from "~/server/consts/user";
-import type { TContext } from "../../trpc";
 import type {
   TCreateUserInput,
   TEditUserInput,
   TGetAllUserInput,
-  TUserResetPassword,
 } from "../../dto/user/user.dto";
-
-type TDrizzleDatabase = TContext["db"];
+import { userSchema } from "~/server/db/schemas/user.schema";
+import type { TDrizzleDatabase } from "../repository";
 
 export const userRepository = {
   async findByLogin(db: TDrizzleDatabase, login: string) {
-    const [user] = await db.select().from(users).where(eq(users.login, login));
+    const [user] = await db
+      .select()
+      .from(userSchema)
+      .where(eq(userSchema.login, login));
     return user;
   },
 
   async findById(db: TDrizzleDatabase, id: string) {
-    const [user] = await db.select().from(users).where(eq(users.id, id));
+    const [user] = await db
+      .select()
+      .from(userSchema)
+      .where(eq(userSchema.id, id));
     return user;
   },
 
@@ -28,7 +30,7 @@ export const userRepository = {
     db: TDrizzleDatabase,
     data: TCreateUserInput & { password: string },
   ) {
-    const [user] = await db.insert(users).values(data).returning();
+    const [user] = await db.insert(userSchema).values(data).returning();
     return user;
   },
 
@@ -38,32 +40,31 @@ export const userRepository = {
     data: Omit<TEditUserInput, "id">,
   ) {
     const [user] = await db
-      .update(users)
+      .update(userSchema)
       .set(data)
-      .where(eq(users.id, id))
+      .where(eq(userSchema.id, id))
       .returning();
     return user;
   },
 
   async setConfirmed(db: TDrizzleDatabase, id: string, confirm: boolean) {
     return db
-      .update(users)
+      .update(userSchema)
       .set({ isConfirmed: confirm })
-      .where(eq(users.id, id));
+      .where(eq(userSchema.id, id));
   },
 
   async deleteUsers(db: TDrizzleDatabase, userIds: string[]) {
-    return db.delete(users).where(inArray(users.id, userIds));
+    return db.delete(userSchema).where(inArray(userSchema.id, userIds));
   },
 
   async getAll(db: TDrizzleDatabase, input: TGetAllUserInput) {
     const { filter, sort, page, limit } = input;
     const offset = (page - 1) * limit;
-
     const whereClause = filter?.query
       ? or(
-          ilike(users.email, `%${filter.query}%`),
-          ilike(users.firstName, `%${filter.query}%`),
+          ilike(userSchema.email, `%${filter.query}%`),
+          ilike(userSchema.firstName, `%${filter.query}%`),
         )
       : undefined;
 
@@ -75,19 +76,19 @@ export const userRepository = {
 
     const data = await db
       .select()
-      .from(users)
+      .from(userSchema)
       .where(whereClause)
       .orderBy(orderClause!)
       .limit(limit)
       .offset(offset);
-
     const totalCount = Number(
-      (await db.select({ count: count() }).from(users))?.[0]?.count ?? 0,
+      (await db.select({ count: count() }).from(userSchema))?.[0]?.count ?? 0,
     );
 
     const filteredCount = Number(
-      (await db.select({ count: count() }).from(users).where(whereClause))?.[0]
-        ?.count ?? 0,
+      (
+        await db.select({ count: count() }).from(userSchema).where(whereClause)
+      )?.[0]?.count ?? 0,
     );
 
     return {
@@ -97,6 +98,6 @@ export const userRepository = {
     };
   },
   async updatePassword(db: TDrizzleDatabase, password: string, id: string) {
-    await db.update(users).set({ password }).where(eq(users.id, id));
+    await db.update(userSchema).set({ password }).where(eq(userSchema.id, id));
   },
 };

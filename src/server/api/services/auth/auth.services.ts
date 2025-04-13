@@ -4,18 +4,18 @@ import { eq } from "drizzle-orm";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { env } from "~/env";
-import { users } from "~/server/db/schemas/user.schema";
 import { TRPCError } from "@trpc/server";
 import type { z } from "zod";
 import { userRepository } from "../../repository/user/user.repository";
+import { userSchema } from "~/server/db/schemas/user.schema";
 type TSignInInput = z.infer<typeof authDataSchema>;
 
 const secretKey = env.JWT_SECRET;
 const signIn = async (ctx: TContext, input: TSignInInput) => {
   const [user] = await ctx.db
     .select()
-    .from(users)
-    .where(eq(users.login, input.login));
+    .from(userSchema)
+    .where(eq(userSchema.login, input.login));
   if (!user)
     throw new TRPCError({
       code: "BAD_REQUEST",

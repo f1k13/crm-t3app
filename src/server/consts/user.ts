@@ -1,9 +1,9 @@
-import { users } from "../db/schemas/user.schema";
+import { userSchema } from "../db/schemas/user.schema";
 
 export const SORTABLE_FIELDS = {
-  firstName: users.firstName,
-  createdAt: users.createdAt,
-  role: users.role,
+  firstName: userSchema.firstName,
+  createdAt: userSchema.createdAt,
+  role: userSchema.role,
 } as const;
 
 export type TSortField = keyof typeof SORTABLE_FIELDS;

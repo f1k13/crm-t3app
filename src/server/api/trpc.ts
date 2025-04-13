@@ -2,14 +2,13 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import jwt from "jsonwebtoken";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { env } from "~/env";
 import type { NextRequest } from "next/server";
 import type { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
-import { users } from "../db/schemas/user.schema";
 import type { CreateWSSContextFnOptions } from "@trpc/server/adapters/ws";
 import { RoleEnum } from "./enums/role-enum";
+import { userRepository } from "./repository/user/user.repository";
 
 export const createTRPCContext = async (opts: {
   headers: Headers | CreateWSSContextFnOptions;
@@ -94,10 +93,7 @@ const authMiddleware = t.middleware<IAuthContext>(async ({ ctx, next }) => {
       });
     }
 
-    const [user] = await ctx.db
-      .select()
-      .from(users)
-      .where(eq(users.id, decoded.sub));
+    const user = await userRepository.findById(ctx.db, decoded.sub);
 
     if (!user) {
       throw new TRPCError({

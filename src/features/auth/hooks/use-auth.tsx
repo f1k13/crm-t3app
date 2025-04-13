@@ -1,7 +1,6 @@
 import { addToast } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import { RoleEnum } from "~/server/api/enums/role-enum";
-import { ADMIN_USERS_LINK, MAIN_LINK } from "~/shared/constants/links";
+import { MAIN_LINK } from "~/shared/constants/links";
 import { api } from "~/trpc/react";
 
 export function useAuth() {
@@ -16,11 +15,7 @@ export function useAuth() {
         color: "success",
       });
       document.cookie = `token=${data.token}; path=/`;
-      if (data.user.role === RoleEnum.ADMIN) {
-        router.push(ADMIN_USERS_LINK);
-      } else {
-        router.push(MAIN_LINK);
-      }
+      router.push(MAIN_LINK);
     },
     onError: async (data) => {
       addToast({
