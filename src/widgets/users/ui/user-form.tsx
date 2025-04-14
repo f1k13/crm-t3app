@@ -1,10 +1,10 @@
 import { Form } from "@heroui/react";
 import { FieldLogin } from "~/features/auth/ui";
-import FieldFirstName from "~/shared/ui/fields/field-firstName";
-import FieldMiddleName from "~/shared/ui/fields/field-middleName";
-import SelectRole from "~/features/user/ui/select-role";
-import FieldEmail from "~/shared/ui/fields/field-email";
-import FieldLastName from "~/shared/ui/fields/field-lastName";
+import FieldFirstName from "~/features/user/ui/fields/field-firstName";
+import FieldMiddleName from "~/features/user/ui/fields/field-middleName";
+import SelectRole from "~/features/user/ui/fields/select-role";
+import FieldEmail from "~/features/user/ui/fields/field-email";
+import FieldLastName from "~/features/user/ui/fields/field-lastName";
 import type { UseFormReturn } from "react-hook-form";
 import type { UserFormValues } from "~/entities/user/model/user.model";
 import type { ReactNode } from "react";

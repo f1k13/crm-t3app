@@ -1,6 +1,5 @@
 "use client";
 
-import UserTemplate from "~/app/_templates/user/user-template";
 import UsersTable from "./_components/users-table";
 import { useDisclosure } from "@heroui/react";
 import UserDrawerCreate from "./_components/user-drawer-create";
@@ -8,6 +7,7 @@ import UserTableTopContent from "~/widgets/users/ui/user-table-top-content";
 import UserDrawerEdit from "./_components/user-drawer-edit";
 import UserTableBottomContent from "~/widgets/users/ui/user-table-bottom-content";
 import UserConfirmDeletedModal from "./_components/user-confirm-deleted-modal";
+import { PageTemplate } from "~/app/_templates/common";
 
 const Page = () => {
   const {
@@ -31,8 +31,8 @@ const Page = () => {
       <UserDrawerCreate isOpen={isOpenCreate} onClose={onCloseCreate} />
       <UserDrawerEdit isOpen={isOpenEdit} onClose={onCloseEdit} />
       <UserConfirmDeletedModal isOpen={isOpenDelete} onClose={onCloseDelete} />
-      <UserTemplate
-        table={
+      <PageTemplate
+        content={
           <UsersTable
             topContent={
               <UserTableTopContent

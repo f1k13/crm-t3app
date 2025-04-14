@@ -4,7 +4,7 @@ import { UserTableTopContentTemplate } from "~/app/_templates/user";
 import { useUserStore } from "~/entities/user/model/store";
 import If from "~/features/abstract/if";
 import ButtonModalOpen from "~/features/user/ui/button-modal-open";
-import SearchUsers from "~/features/user/ui/search-users";
+import SearchUsers from "~/features/user/ui/fields/search-users";
 
 const UserTableTopContent = ({
   onOpen,

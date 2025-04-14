@@ -1,19 +1,27 @@
 "use client";
 
-import { Input } from "@heroui/react";
-import React, { useState } from "react";
-import { useSuggestCompany } from "~/entities/company/hooks/use-suggest-company";
+import { useDisclosure } from "@heroui/react";
+import { PageTemplate } from "~/app/_templates/common";
+import ButtonCreateCompany from "~/features/company/ui/button-create-company";
+import CreateCompany from "./_components/create-company";
 
 const Page = () => {
-  const [query, setQuery] = useState("");
-  const suggestCompany = useSuggestCompany({ query });
-  console.log(suggestCompany);
+  const {
+    onClose: onCloseCompanyCreate,
+    isOpen: isOpenCompanyCreate,
+    onOpen: onOpenCompanyCreate,
+  } = useDisclosure();
   return (
-    <Input
-      placeholder={"компания"}
-      onChange={(e) => setQuery(e.target.value)}
-      value={query}
-    />
+    <>
+      <CreateCompany
+        isOpen={isOpenCompanyCreate}
+        onClose={onCloseCompanyCreate}
+      />
+      <PageTemplate
+        title={"Клиенты"}
+        content={<ButtonCreateCompany onOpen={onOpenCompanyCreate} />}
+      />
+    </>
   );
 };
 

@@ -1,9 +1,10 @@
 import { api } from "~/trpc/react";
 
 export function useSuggestCompany({ query }: { query: string }) {
+  console.log(query);
   const { data, isLoading } = api.company.suggestCompany.useQuery(
     {
-      query: query,
+      query: String(query) ?? "",
     },
     {
       enabled: !!query,
