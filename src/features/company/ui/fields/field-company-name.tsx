@@ -1,17 +1,27 @@
 import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { debounce } from "lodash";
+import { Search } from "lucide-react";
 import { useCallback, useState } from "react";
+import { useFormContext } from "react-hook-form";
 import { useSuggestCompany } from "~/entities/company/hooks/use-suggest-company";
 import { useCompanyStore } from "~/entities/company/model/store";
+import { CompanyTypeEnum } from "~/server/api/enums/company-enum";
+import { FlexItemsCenter } from "~/shared/ui/templates/common";
+type TArgsFunc = {
+  value: string;
+  inn: string;
+};
+const FieldCompanyName = () => {
+  const { setValue, watch } = useFormContext();
 
-const FieldCompanyName = ({
-  setValue,
-}: {
-  setValue: (value: string) => void;
-}) => {
+  const isDisabled = watch("type") === CompanyTypeEnum.NP;
+
   const { query, setQuery } = useCompanyStore((state) => state);
   const [querySearch, setQuerySearch] = useState("");
-
+  const setNameInnCompany = (data: TArgsFunc) => {
+    setValue("name", data.value);
+    setValue("inn", parseInt(data.inn));
+  };
   const onChangeDebounce = useCallback(
     debounce((value: string) => {
       setQuery(value);
@@ -25,12 +35,15 @@ const FieldCompanyName = ({
   };
 
   const { data, isLoading } = useSuggestCompany({ query });
+
   return (
     <Autocomplete
+      isDisabled={isDisabled}
+      startContent={<Search />}
       items={data?.suggestions ?? []}
       inputValue={querySearch}
       onInputChange={handleChange}
-      isRequired
+      isRequired={!isDisabled}
       isLoading={isLoading}
       placeholder={"ИНН или наименование организации"}
       label={"Введите ИНН"}
@@ -45,12 +58,17 @@ const FieldCompanyName = ({
       {(company) => (
         <AutocompleteItem
           textValue={company.value}
-          onPress={() => setValue(company.value)}
-          key={`${company.value}-${company.data.inn}`}
+          onPress={() =>
+            setNameInnCompany({
+              value: company.value,
+              inn: company.data.inn,
+            })
+          }
+          key={`${company.value}-${company.data.inn}-${Date.now()}-${company.data.ogrn}`}
         >
-          <div className={"flex items-center"}>
+          <FlexItemsCenter>
             {company.value} - {company.data.inn}
-          </div>
+          </FlexItemsCenter>
         </AutocompleteItem>
       )}
     </Autocomplete>

@@ -1,6 +1,6 @@
 "use client";
 
-import { AuthTemplate } from "~/app/_templates/auth";
+import { AuthTemplate } from "~/shared/ui/templates/auth";
 import ResetForm from "../_components/reset-form";
 import { Suspense } from "react";
 import { Spinner } from "@heroui/react";

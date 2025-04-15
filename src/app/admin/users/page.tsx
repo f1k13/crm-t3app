@@ -7,7 +7,7 @@ import UserTableTopContent from "~/widgets/users/ui/user-table-top-content";
 import UserDrawerEdit from "./_components/user-drawer-edit";
 import UserTableBottomContent from "~/widgets/users/ui/user-table-bottom-content";
 import UserConfirmDeletedModal from "./_components/user-confirm-deleted-modal";
-import { PageTemplate } from "~/app/_templates/common";
+import { PageTemplate } from "~/shared/ui/templates/common";
 
 const Page = () => {
   const {

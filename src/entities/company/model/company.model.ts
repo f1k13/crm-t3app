@@ -16,9 +16,29 @@ export const companyCreateSchema = z.object({
   comment: z.string().optional(),
 
   phoneNumbers: z
-    .array(z.string().min(1, "phone number is required"))
+    .array(
+      z.object({
+        value: z
+          .string()
+          .min(1, "phone number is required")
+          .regex(/^(\+7|8)\d{10}$/, "Неверный формат телефона"),
+      }),
+    )
     .optional(),
-  emails: z.array(z.string().email("invalid email")).optional(),
+
+  emails: z
+    .array(
+      z.object({
+        value: z
+          .string()
+          .email("invalid email")
+          .regex(
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            "Некорректный email",
+          ),
+      }),
+    )
+    .optional(),
   messengers: z
     .array(
       z.object({
@@ -38,13 +58,30 @@ export const companyCreateSchema = z.object({
     .optional(),
 });
 
-export const companyTypeData = {
+export const COMPANY_TYPE = {
   [CompanyTypeEnum.IE]: "ИП",
   [CompanyTypeEnum.LB]: "Организация",
-  [CompanyTypeEnum.NP]: "Физ.лицо",
-  [CompanyTypeEnum.SC]: "ГОС.компания",
+  [CompanyTypeEnum.NP]: "ФИЗ лицо",
+  [CompanyTypeEnum.SC]: "ГОС компания",
 };
-
+export const companyDataType = [
+  {
+    key: CompanyTypeEnum.IE,
+    label: "ИП",
+  },
+  {
+    key: CompanyTypeEnum.LB,
+    label: "Организация",
+  },
+  {
+    key: CompanyTypeEnum.NP,
+    label: "ФИЗ лицо",
+  },
+  {
+    key: CompanyTypeEnum.SC,
+    label: "ГОС компания",
+  },
+];
 export type TCreateCompany = z.infer<typeof companyCreateSchema>;
 
 export type TCompanyFormValues = TCreateCompany;

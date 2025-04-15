@@ -17,7 +17,7 @@ import {
 } from "~/entities/user/model/user.model";
 
 import { DateTime } from "luxon";
-import { RelativeFlexItemsCenter } from "~/app/_templates/common";
+import { RelativeFlexItemsCenter } from "~/shared/ui/templates/common";
 import { Copy, Pencil, Trash2 } from "lucide-react";
 import { useUserStore } from "~/entities/user/model/store";
 import { useFilterUsers } from "~/entities/user/hooks/use-filter-users";

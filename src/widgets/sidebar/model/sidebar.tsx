@@ -1,10 +1,11 @@
-import { Building2, ListOrdered, Users } from "lucide-react";
+import { Building2, ComputerIcon, ListOrdered, Users } from "lucide-react";
 import type { JSX } from "react";
 import {
   ADMIN_DEALS_LINK,
   ADMIN_USERS_LINK,
   COMPANY_LINK,
   MAIN_DEALS_LINK,
+  MAIN_LINK,
 } from "~/shared/constants/links";
 
 export type TSidebar = {
@@ -14,6 +15,11 @@ export type TSidebar = {
 };
 
 export const adminSidebar: TSidebar[] = [
+  {
+    title: "Главная",
+    icon: ComputerIcon,
+    link: MAIN_LINK,
+  },
   {
     title: "Пользователи",
     icon: Users,
@@ -32,6 +38,11 @@ export const adminSidebar: TSidebar[] = [
 ];
 
 export const managerSidebar: TSidebar[] = [
+  {
+    title: "Главная",
+    icon: ComputerIcon,
+    link: MAIN_LINK,
+  },
   {
     title: "Сделки",
     icon: ListOrdered,

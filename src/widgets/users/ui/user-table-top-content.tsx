@@ -1,6 +1,6 @@
 import { Button } from "@heroui/react";
 import React from "react";
-import { UserTableTopContentTemplate } from "~/app/_templates/user";
+import { UserTableTopContentTemplate } from "~/shared/ui/templates/user";
 import { useUserStore } from "~/entities/user/model/store";
 import If from "~/features/abstract/if";
 import ButtonModalOpen from "~/features/user/ui/button-modal-open";

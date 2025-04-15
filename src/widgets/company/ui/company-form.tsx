@@ -1,19 +1,31 @@
-import { Form } from "@heroui/react";
+import { Button, Divider, Form } from "@heroui/react";
 import React from "react";
-import type { UseFormReturn } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import type { TCompanyFormValues } from "~/entities/company/model/company.model";
-import FieldCompanyName from "~/features/company/ui/fields/field-company-name";
+import {
+  FieldComment,
+  FieldCompanyName,
+  FieldSelectTypeCompany,
+  FieldsEmailCompany,
+  FieldsPhoneNumber,
+} from "~/features/company/ui";
 
 type CompanyFormProps = {
-  handleSubmit?: (data: TCompanyFormValues) => void;
-  form: UseFormReturn<TCompanyFormValues>;
+  onSubmit: (data: TCompanyFormValues) => void;
 };
 
-const CompanyForm = ({ handleSubmit, form }: CompanyFormProps) => {
-  console.log(form.watch());
+const CompanyForm = ({ onSubmit }: CompanyFormProps) => {
+  const { handleSubmit } = useFormContext<TCompanyFormValues>();
+
   return (
-    <Form>
-      <FieldCompanyName setValue={(value) => form.setValue("name", value)} />
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <FieldCompanyName />
+      <FieldSelectTypeCompany />
+      <FieldComment />
+      <Divider className={"my-4 w-full"} />
+      <FieldsPhoneNumber />
+      <FieldsEmailCompany />
+      <Button type={"submit"}>Отправить</Button>
     </Form>
   );
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import { useDisclosure } from "@heroui/react";
-import { PageTemplate } from "~/app/_templates/common";
+import { PageTemplate } from "~/shared/ui/templates/common";
 import ButtonCreateCompany from "~/features/company/ui/button-create-company";
 import CreateCompany from "./_components/create-company";
 

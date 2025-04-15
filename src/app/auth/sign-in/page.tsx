@@ -1,4 +1,4 @@
-import { AuthTemplate } from "~/app/_templates/auth";
+import { AuthTemplate } from "~/shared/ui/templates/auth";
 import AuthForm from "../_components/auth-form";
 
 const Page = () => {
