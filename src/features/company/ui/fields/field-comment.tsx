@@ -5,6 +5,7 @@ const FieldComment = () => {
   const { register } = useFormContext();
   return (
     <Textarea
+      maxRows={2}
       {...register("comment")}
       placeholder={"Комментарий..."}
       label={"Введите комментарий"}

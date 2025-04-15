@@ -27,11 +27,17 @@ const CreateFormCompany = () => {
           value: "",
         },
       ],
-      messengers: undefined,
+      messengers: [
+        {
+          type: "",
+          contact: "",
+        },
+      ],
       contactPersons: undefined,
       type: CompanyTypeEnum.LB,
     },
   });
+
   const create = useCreateCompany();
   const onSubmit = (data: TCreateCompany) => {
     create.mutate({

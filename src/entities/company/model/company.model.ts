@@ -1,5 +1,10 @@
 import { z } from "zod";
 import { CompanyTypeEnum } from "~/server/api/enums/company-enum";
+import {
+  TELEGRAM_CONTACT,
+  VIBER_CONTACT,
+  WHATS_APP_CONTACT,
+} from "~/shared/constants/contacts";
 
 export const companyCreateSchema = z.object({
   name: z.string().min(1, "company name is required"),
@@ -31,7 +36,6 @@ export const companyCreateSchema = z.object({
       z.object({
         value: z
           .string()
-          .email("invalid email")
           .regex(
             /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
             "Некорректный email",

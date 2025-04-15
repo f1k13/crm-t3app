@@ -9,7 +9,7 @@ const CreateCompany = ({
   onClose: () => void;
 }) => {
   return (
-    <Drawer size={"2xl"} isOpen={isOpen} onClose={onClose}>
+    <Drawer size={"5xl"} isOpen={isOpen} onClose={onClose}>
       <DrawerContent>
         <DrawerHeader>Добавление нового клиента</DrawerHeader>
         <DrawerBody>

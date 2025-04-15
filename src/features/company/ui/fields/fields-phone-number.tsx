@@ -1,13 +1,14 @@
-import { Button, Input } from "@heroui/react";
+import { Button, form, Input } from "@heroui/react";
 import { Plus, Trash2 } from "lucide-react";
 import React from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
+import type { TCompanyFormValues } from "~/entities/company/model/company.model";
 import { phoneMask } from "~/shared/lib/phone-mask";
 import { FlexItemsCenterG2 } from "~/shared/ui/templates/common";
 import { FieldsCompanyTemplate } from "~/shared/ui/templates/company";
 
 const FieldsPhoneNumber = () => {
-  const { control, setValue } = useFormContext();
+  const { control, setValue, formState } = useFormContext<TCompanyFormValues>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "phoneNumbers",
@@ -16,13 +17,13 @@ const FieldsPhoneNumber = () => {
   const phoneNumbers = useWatch({
     control,
     name: "phoneNumbers",
-  }) as string[];
+  });
 
   const handleChange = (index: number, value: string) => {
     const maskValue = phoneMask(value);
-    setValue(`phoneNumbers.${index}`, maskValue);
+    setValue(`phoneNumbers.${index}`, { value: maskValue });
   };
-	
+
   return (
     <FieldsCompanyTemplate
       title={
@@ -32,24 +33,34 @@ const FieldsPhoneNumber = () => {
       }
       fields={
         <>
-          {" "}
           {fields.map((field, index) => (
             <FlexItemsCenterG2 key={field.id}>
               <Input
-                value={phoneNumbers[index] ?? ""}
+                value={phoneNumbers?.[index]?.value ?? ""}
                 onChange={(e) => handleChange(index, e.target.value)}
+                isInvalid={!!formState.errors.phoneNumbers?.[index]?.value}
+                errorMessage={
+                  formState.errors.phoneNumbers?.[index]?.value?.message
+                }
+                endContent={
+                  <Trash2
+                    onClick={() => remove(index)}
+                    className="h-4 w-4 cursor-pointer text-danger-500"
+                  />
+                }
                 placeholder="+7 (___) ___-__-__"
               />
-              <Button onPress={() => remove(index)} color={"danger"}>
-                <Trash2 className="w-4 h-4" />
-              </Button>
             </FlexItemsCenterG2>
           ))}
         </>
       }
       append={
-        <Button color={"success"} onPress={() => append("")} variant={"flat"}>
-          <Plus className="w-4 h-4 mr-1" /> Добавить телефон
+        <Button
+          color={"success"}
+          onPress={() => append({ value: "" })}
+          variant={"flat"}
+        >
+          <Plus className="mr-1 h-4 w-4" /> Добавить телефон
         </Button>
       }
     />

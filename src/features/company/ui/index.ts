@@ -4,3 +4,4 @@ export { default as FieldSelectTypeCompany } from "./fields/field-select-type-co
 export { default as FieldsEmailCompany } from "./fields/fields-email-company";
 export { default as FieldsPhoneNumber } from "./fields/fields-phone-number";
 export { default as FieldComment } from "./fields/field-comment";
+export { default as FieldsMessengersCompany } from "./fields/fields-messengers-company";
