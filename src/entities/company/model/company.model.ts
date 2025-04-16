@@ -1,10 +1,5 @@
 import { z } from "zod";
 import { CompanyTypeEnum } from "~/server/api/enums/company-enum";
-import {
-  TELEGRAM_CONTACT,
-  VIBER_CONTACT,
-  WHATS_APP_CONTACT,
-} from "~/shared/constants/contacts";
 
 export const companyCreateSchema = z.object({
   name: z.string().min(1, "company name is required"),
@@ -19,14 +14,17 @@ export const companyCreateSchema = z.object({
     .optional(),
 
   comment: z.string().optional(),
-
+  areaId: z.string().optional(),
   phoneNumbers: z
     .array(
       z.object({
         value: z
           .string()
-          .min(1, "phone number is required")
-          .regex(/^(\+7|8)\d{10}$/, "Неверный формат телефона"),
+          .transform((val) => val.replace(/[^\d+]/g, ""))
+          .refine(
+            (val) => /^(\+7|8)\d{10}$/.test(val),
+            "Неверный формат телефона",
+          ),
       }),
     )
     .optional(),
@@ -55,8 +53,19 @@ export const companyCreateSchema = z.object({
     .array(
       z.object({
         fullName: z.string().min(1, "name is required"),
-        phone: z.string().min(1, "phone is required"),
-        email: z.string().email("invalid email"),
+        phone: z
+          .string()
+          .transform((val) => val.replace(/[^\d+]/g, ""))
+          .refine(
+            (val) => /^(\+7|8)\d{10}$/.test(val),
+            "Неверный формат телефона",
+          ),
+        email: z
+          .string()
+          .regex(
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            "Некорректный email",
+          ),
       }),
     )
     .optional(),
@@ -89,3 +98,15 @@ export const companyDataType = [
 export type TCreateCompany = z.infer<typeof companyCreateSchema>;
 
 export type TCompanyFormValues = TCreateCompany;
+
+export const areaData = [
+  "Доставка",
+  "Не профильная организация",
+  "Строительство мостов",
+  "Строительство дорог",
+  "Земляные работы",
+  "Прокладка коммуникаций",
+  "Коттеджное строительство",
+  "Гражданское строительство",
+  "Завод по производству",
+];

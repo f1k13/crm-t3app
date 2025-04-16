@@ -1,9 +1,10 @@
 "use client";
 
 import { useDisclosure } from "@heroui/react";
-import { PageTemplate } from "~/shared/ui/templates/common";
+import { FlexItemsJustify, PageTemplate } from "~/shared/ui/templates/common";
 import ButtonCreateCompany from "~/features/company/ui/button-create-company";
 import CreateCompany from "./_components/create-company";
+import AreaModal from "~/widgets/area/ui/area-modal";
 
 const Page = () => {
   const {
@@ -19,7 +20,12 @@ const Page = () => {
       />
       <PageTemplate
         title={"Клиенты"}
-        content={<ButtonCreateCompany onOpen={onOpenCompanyCreate} />}
+        content={
+          <FlexItemsJustify>
+            <ButtonCreateCompany onOpen={onOpenCompanyCreate} />
+            <AreaModal />
+          </FlexItemsJustify>
+        }
       />
     </>
   );

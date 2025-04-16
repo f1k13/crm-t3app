@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { TSidebar } from "../model/sidebar";
-import { SidebarMenuButton, SidebarMenuItem } from "~/shared/ui/sidebar";
+import { SidebarMenuButton, SidebarMenuItem } from "~/shared/ui/shadcn/sidebar";
 import { usePathname } from "next/navigation";
 
 const ListSidebar = ({ list }: { list: TSidebar[] }) => {

@@ -45,8 +45,9 @@ const FieldsEmailCompany = () => {
           color={"success"}
           onPress={() => append({ value: "" })}
           variant={"flat"}
+          isIconOnly
         >
-          <Plus className="mr-1 h-4 w-4" /> Добавить email
+          <Plus />
         </Button>
       }
     />

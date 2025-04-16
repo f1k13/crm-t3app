@@ -12,7 +12,7 @@ export const companyCreateSchema = z.object({
       CompanyTypeEnum.SC,
     ])
     .optional(),
-
+  areaId: z.string().optional(),
   comment: z.string().optional(),
 
   phoneNumbers: z

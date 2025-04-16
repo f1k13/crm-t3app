@@ -17,23 +17,11 @@ const CreateFormCompany = () => {
       name: "",
       inn: 0,
       comment: "",
-      phoneNumbers: [
-        {
-          value: "",
-        },
-      ],
-      emails: [
-        {
-          value: "",
-        },
-      ],
-      messengers: [
-        {
-          type: "",
-          contact: "",
-        },
-      ],
+      phoneNumbers: undefined,
+      emails: undefined,
+      messengers: undefined,
       contactPersons: undefined,
+      areaId: "",
       type: CompanyTypeEnum.LB,
     },
   });
@@ -42,6 +30,7 @@ const CreateFormCompany = () => {
   const onSubmit = (data: TCreateCompany) => {
     create.mutate({
       ...data,
+      inn: Number(data.inn),
       phoneNumbers: data.phoneNumbers?.map((it) => it.value),
       emails: data.emails?.map((it) => it.value),
     });

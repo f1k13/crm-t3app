@@ -12,8 +12,10 @@ const FieldsCompanyTemplate = ({
   return (
     <div className={"mt-4 flex w-full flex-col gap-2"}>
       {title}
-      <div className={"flex w-full flex-wrap items-center gap-4"}>{fields}</div>
-      <div>{append}</div>
+      <div className={"flex w-full items-start gap-4"}>
+        <div className={"flex w-full flex-col gap-4"}>{fields}</div>
+        <div>{append}</div>
+      </div>
     </div>
   );
 };

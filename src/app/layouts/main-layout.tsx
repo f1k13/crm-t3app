@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import AppSidebar from "./app-sidebar";
-import { SidebarProvider } from "~/shared/ui/sidebar";
+import { SidebarProvider } from "~/shared/ui/shadcn/sidebar";
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (

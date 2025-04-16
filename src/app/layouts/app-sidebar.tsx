@@ -12,7 +12,7 @@ import {
   SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
-} from "~/shared/ui/sidebar";
+} from "~/shared/ui/shadcn/sidebar";
 import { adminSidebar, managerSidebar } from "~/widgets/sidebar/model/sidebar";
 import ListSidebar from "~/widgets/sidebar/ui/list-sidebar";
 import TopSidebar from "~/widgets/sidebar/ui/top-sidebar";

@@ -1,6 +1,7 @@
 import { pgTableCreator } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm/relations";
 import { CompanyTypeEnum } from "~/server/api/enums/company-enum";
+import { areaSchema } from "./area.schema";
 
 export const createTable = pgTableCreator((name) => `crm_${name}`);
 export type TCompanyModel = typeof companySchema.$inferSelect;
@@ -11,6 +12,7 @@ export const companySchema = createTable("company", (d) => ({
   name: d.text().unique().notNull(),
   type: d.text().default(CompanyTypeEnum.LB).$type<CompanyTypeEnum>(),
   comment: d.text(),
+  areaId: d.uuid().references(() => areaSchema.id),
 }));
 
 export const phoneNumberSchema = createTable("company_phone_number", (d) => ({
@@ -28,7 +30,7 @@ export const emailSchema = createTable("company_email", (d) => ({
 export const messengerSchema = createTable("company_messenger", (d) => ({
   id: d.uuid().primaryKey().defaultRandom(),
   companyId: d.uuid().references(() => companySchema.id),
-  type: d.integer().notNull(),
+  type: d.text().notNull(),
   contact: d.text().notNull(),
 }));
 

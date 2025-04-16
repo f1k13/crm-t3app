@@ -1,4 +1,4 @@
-import { Button, form, Input } from "@heroui/react";
+import { Button, Input } from "@heroui/react";
 import { Plus, Trash2 } from "lucide-react";
 import React from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
@@ -45,7 +45,7 @@ const FieldsPhoneNumber = () => {
                 endContent={
                   <Trash2
                     onClick={() => remove(index)}
-                    className="h-4 w-4 cursor-pointer text-danger-500"
+                    className="w-4 h-4 cursor-pointer text-danger-500"
                   />
                 }
                 placeholder="+7 (___) ___-__-__"
@@ -59,8 +59,9 @@ const FieldsPhoneNumber = () => {
           color={"success"}
           onPress={() => append({ value: "" })}
           variant={"flat"}
+          isIconOnly
         >
-          <Plus className="mr-1 h-4 w-4" /> Добавить телефон
+          <Plus  />
         </Button>
       }
     />

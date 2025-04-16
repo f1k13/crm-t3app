@@ -16,6 +16,7 @@ export const companyRepository = {
       name: dto.name,
       type: dto.type,
       comment: dto.comment,
+      areaId: dto.areaId,
     };
 
     const [company] = await db

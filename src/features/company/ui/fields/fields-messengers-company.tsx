@@ -102,8 +102,9 @@ const FieldsMessengersCompany = () => {
           color={"success"}
           onPress={() => append({ contact: "", type: "" })}
           variant={"flat"}
+          isIconOnly
         >
-          <Plus className="mr-1 h-4 w-4" /> Добавить мессенджер
+          <Plus />
         </Button>
       }
     />
