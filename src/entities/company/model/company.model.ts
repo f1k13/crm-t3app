@@ -2,8 +2,8 @@ import { z } from "zod";
 import { CompanyTypeEnum } from "~/server/api/enums/company-enum";
 
 export const companyCreateSchema = z.object({
-  name: z.string().min(1, "company name is required"),
-  inn: z.number(),
+  name: z.string().min(1, "Наименование компании обязательно"),
+  inn: z.string(),
   type: z
     .enum([
       CompanyTypeEnum.IE,
@@ -44,15 +44,15 @@ export const companyCreateSchema = z.object({
   messengers: z
     .array(
       z.object({
-        type: z.string().min(1, "messenger type is required"),
-        contact: z.string().min(1, "messenger contact is required"),
+        type: z.string().min(1, "Выберите тип мессенджера"),
+        contact: z.string().min(1, "Поле контакт обязательно"),
       }),
     )
     .optional(),
   contactPersons: z
     .array(
       z.object({
-        fullName: z.string().min(1, "name is required"),
+        fullName: z.string().min(1, "Поле ФИО обязательно"),
         phone: z
           .string()
           .transform((val) => val.replace(/[^\d+]/g, ""))
@@ -98,15 +98,3 @@ export const companyDataType = [
 export type TCreateCompany = z.infer<typeof companyCreateSchema>;
 
 export type TCompanyFormValues = TCreateCompany;
-
-export const areaData = [
-  "Доставка",
-  "Не профильная организация",
-  "Строительство мостов",
-  "Строительство дорог",
-  "Земляные работы",
-  "Прокладка коммуникаций",
-  "Коттеджное строительство",
-  "Гражданское строительство",
-  "Завод по производству",
-];

@@ -31,5 +31,23 @@ export const companyService = {
         phoneNumbers: data.phoneNumbers,
       });
     }
+    if (data.emails && data.emails.length > 0 && company) {
+      await companyRepository.createEmail(ctx.db, {
+        companyId: company.id,
+        emails: data.emails,
+      });
+    }
+    if (data.messengers && data.messengers.length > 0 && company) {
+      await companyRepository.createMessenger(ctx.db, {
+        companyId: company.id,
+        messengers: data.messengers,
+      });
+    }
+    if (data.contactPersons && data.contactPersons.length > 0 && company) {
+      await companyRepository.createPersons(ctx.db, {
+        companyId: company.id,
+        contactPersons: data.contactPersons,
+      });
+    }
   },
 };

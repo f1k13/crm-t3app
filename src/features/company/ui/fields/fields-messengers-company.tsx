@@ -1,11 +1,17 @@
 import { Button, Input } from "@heroui/react";
-import { Plus, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import React, { type JSX } from "react";
-import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
+import {
+  Controller,
+  useFieldArray,
+  useFormContext,
+  useWatch,
+} from "react-hook-form";
 import { SiTelegram, SiViber, SiWhatsapp } from "react-icons/si";
 import type { TCompanyFormValues } from "~/entities/company/model/company.model";
-import { FlexItemsCenterG2 } from "~/shared/ui/templates/common";
 import { FieldsCompanyTemplate } from "~/shared/ui/templates/company";
+import FieldsRowCompany from "~/shared/ui/templates/company/fields-row-company";
+import AppendButton from "./append-button";
 export type TMessengerKey = "telegram" | "whatsapp" | "viber";
 type TMessengerOpt = {
   key: TMessengerKey;
@@ -23,9 +29,8 @@ const messengerIcons: Record<TMessengerKey, JSX.Element> = {
   whatsapp: <SiWhatsapp className="h-5 w-5 text-[#25D366]" />,
   viber: <SiViber className="h-5 w-5 text-[#665CAC]" />,
 };
-const FieldsMessengersCompany = () => {
-  const { control, setValue, formState, watch } =
-    useFormContext<TCompanyFormValues>();
+const FieldsMessengersCompany = ({ onRemove }: { onRemove: () => void }) => {
+  const { control, setValue, formState } = useFormContext<TCompanyFormValues>();
 
   const value = useWatch({
     control,
@@ -44,13 +49,10 @@ const FieldsMessengersCompany = () => {
     });
   };
 
-  const onChangeContact = (index: number, contact: string) => {
-    setValue(`messengers.${index}`, {
-      type: value?.[index]?.type ?? "",
-      contact: contact,
-    });
+  const handleRemove = (index: number) => {
+    remove(index);
+    if (fields.length === 1) onRemove();
   };
-
   return (
     <FieldsCompanyTemplate
       title={
@@ -61,51 +63,47 @@ const FieldsMessengersCompany = () => {
       fields={
         <>
           {fields.map((field, index) => (
-            <FlexItemsCenterG2 key={field.id}>
-              <Input
-                value={value?.[index]?.contact}
-                onChange={(e) => onChangeContact(index, e.target.value)}
-                placeholder={"@example"}
-                isInvalid={
-                  !!formState.errors.messengers?.[index]?.contact?.message
-                }
-                errorMessage={
-                  formState.errors.messengers?.[index]?.contact?.message
-                }
-                endContent={
-                  <Trash2
-                    onClick={() => remove(index)}
-                    className="h-4 w-4 cursor-pointer text-danger-500"
+            <FieldsRowCompany key={field.id}>
+              <Controller
+                name={`messengers.${index}.contact`}
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    placeholder={"@example"}
+                    isInvalid={
+                      !!formState.errors.messengers?.[index]?.contact?.message
+                    }
+                    errorMessage={
+                      formState.errors.messengers?.[index]?.contact?.message
+                    }
+                    endContent={
+                      <Trash2
+                        onClick={() => handleRemove(index)}
+                        className="h-4 w-4 cursor-pointer text-danger-500"
+                      />
+                    }
                   />
-                }
+                )}
               />
               {messengerOptions.map((it) => (
                 <Button
                   key={it.label}
                   isIconOnly
                   variant={
-                    watch("messengers")?.[index]?.type === it.key
-                      ? "faded"
-                      : "bordered"
+                    value?.[index]?.type === it.key ? "flat" : "bordered"
                   }
                   onPress={() => setType(index, it.key)}
                 >
                   {messengerIcons[it.key]}
                 </Button>
               ))}
-            </FlexItemsCenterG2>
+            </FieldsRowCompany>
           ))}
         </>
       }
       append={
-        <Button
-          color={"success"}
-          onPress={() => append({ contact: "", type: "" })}
-          variant={"flat"}
-          isIconOnly
-        >
-          <Plus />
-        </Button>
+        <AppendButton onClick={() => append({ contact: "", type: "" })} />
       }
     />
   );

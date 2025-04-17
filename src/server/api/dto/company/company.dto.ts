@@ -3,7 +3,7 @@ import { CompanyTypeEnum } from "../../enums/company-enum";
 
 export const companyCreateSchema = z.object({
   name: z.string().min(1, "company name is required"),
-  inn: z.number(),
+  inn: z.string(),
   type: z
     .enum([
       CompanyTypeEnum.IE,
@@ -49,7 +49,7 @@ export const phoneNumberCompanySchema = z.object({
 
 export const emailCompanySchema = z.object({
   companyId: z.string().min(1),
-  phoneNumbers: z.array(z.string().min(1)),
+  emails: z.array(z.string().min(1)),
 });
 
 export const messengerCompanySchema = z.object({
@@ -64,7 +64,7 @@ export const messengerCompanySchema = z.object({
 
 export const contactPersonCompany = z.object({
   companyId: z.string().min(1),
-  person: z.array(
+  contactPersons: z.array(
     z.object({
       fullName: z.string().min(1),
       phone: z.string().min(1),
@@ -76,5 +76,11 @@ export const contactPersonCompany = z.object({
 export type TCreateCompanyInput = z.infer<typeof companyCreateSchema>;
 
 export type TCreatePhoneNumberInput = z.infer<typeof phoneNumberCompanySchema>;
+
+export type TCreateEmailInput = z.infer<typeof emailCompanySchema>;
+
+export type TMessengerCreate = z.infer<typeof messengerCompanySchema>;
+
+export type TContactPersonCreate = z.infer<typeof contactPersonCompany>;
 
 export type TSuggestCompanyInput = z.infer<typeof suggestDaDataCompanySchema>;

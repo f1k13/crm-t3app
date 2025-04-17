@@ -8,7 +8,7 @@ export type TCompanyModel = typeof companySchema.$inferSelect;
 
 export const companySchema = createTable("company", (d) => ({
   id: d.uuid().primaryKey().defaultRandom(),
-  inn: d.integer().unique(),
+  inn: d.text().unique(),
   name: d.text().unique().notNull(),
   type: d.text().default(CompanyTypeEnum.LB).$type<CompanyTypeEnum>(),
   comment: d.text(),

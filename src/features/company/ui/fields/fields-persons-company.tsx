@@ -1,38 +1,23 @@
-import { Input } from "@heroui/react";
+import { Button, Input } from "@heroui/react";
+import { Trash2 } from "lucide-react";
 import React from "react";
-import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
+import { Controller, useFieldArray, useFormContext } from "react-hook-form";
 import type { TCompanyFormValues } from "~/entities/company/model/company.model";
-import { FlexItemsCenterG2 } from "~/shared/ui/templates/common";
-import { FieldsCompanyTemplate } from "~/shared/ui/templates/company";
-import { Plus, Trash2 } from "lucide-react";
-import { Button } from "@heroui/react";
 import { phoneMask } from "~/shared/lib/phone-mask";
+import FieldsRowCompany from "~/shared/ui/templates/company/fields-row-company";
+import { FieldsCompanyTemplate } from "~/shared/ui/templates/company";
+import AppendButton from "./append-button";
 
-const FieldsPersonsCompany = () => {
-  const { control, setValue, formState } = useFormContext<TCompanyFormValues>();
-
+const FieldsPersonsCompany = ({ onRemove }: { onRemove: () => void }) => {
+  const { control } = useFormContext<TCompanyFormValues>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: "contactPersons",
   });
-
-  const value = useWatch({
-    control,
-    name: "contactPersons",
-  });
-
-  const onChange = (
-    index: number,
-    field: "fullName" | "phone" | "email",
-    val: string,
-  ) => {
-    const prev = value?.[index] ?? { fullName: "", phone: "", email: "" };
-    setValue(`contactPersons.${index}`, {
-      ...prev,
-      [field]: val,
-    });
+  const handleRemove = (index: number) => {
+    remove(index);
+    if (fields.length === 1) onRemove();
   };
-
   return (
     <FieldsCompanyTemplate
       title={
@@ -43,53 +28,61 @@ const FieldsPersonsCompany = () => {
       fields={
         <>
           {fields.map((field, index) => (
-            <FlexItemsCenterG2 key={field.id}>
-              <Input
-                placeholder="ФИО"
-                value={value?.[index]?.fullName ?? ""}
-                onChange={(e) => onChange(index, "fullName", e.target.value)}
+            <FieldsRowCompany key={field.id}>
+              <Controller
+                control={control}
+                name={`contactPersons.${index}.fullName`}
+                render={({ field, fieldState }) => (
+                  <Input
+                    {...field}
+                    placeholder="ФИО"
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  />
+                )}
               />
-              <Input
-                placeholder="+7 (___) ___-__-__"
-                value={value?.[index]?.phone ?? ""}
-                onChange={(e) =>
-                  onChange(index, "phone", phoneMask(e.target.value))
-                }
-                isInvalid={!!formState.errors.contactPersons?.[index]?.phone}
-                errorMessage={
-                  formState.errors.contactPersons?.[index]?.phone?.message
-                }
+              <Controller
+                control={control}
+                name={`contactPersons.${index}.phone`}
+                render={({ field, fieldState }) => (
+                  <Input
+                    {...field}
+                    placeholder="+7 (___) ___-__-__"
+                    value={field.value || ""}
+                    onChange={(e) => field.onChange(phoneMask(e.target.value))}
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  />
+                )}
               />
-              <Input
-                placeholder="Email"
-                value={value?.[index]?.email ?? ""}
-                onChange={(e) => onChange(index, "email", e.target.value)}
-                isInvalid={!!formState.errors.contactPersons?.[index]?.email}
-                errorMessage={
-                  formState.errors.contactPersons?.[index]?.email?.message
-                }
+              <Controller
+                control={control}
+                name={`contactPersons.${index}.email`}
+                render={({ field, fieldState }) => (
+                  <Input
+                    {...field}
+                    placeholder="Email"
+                    isInvalid={!!fieldState.error}
+                    errorMessage={fieldState.error?.message}
+                  />
+                )}
               />
               <Button
                 isIconOnly
                 variant="light"
                 color="danger"
-                onPress={() => remove(index)}
+                onPress={() => handleRemove(index)}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
-            </FlexItemsCenterG2>
+            </FieldsRowCompany>
           ))}
         </>
       }
       append={
-        <Button
-          color="success"
-          variant="flat"
-          onPress={() => append({ fullName: "", phone: "", email: "" })}
-          isIconOnly
-        >
-          <Plus />
-        </Button>
+        <AppendButton
+          onClick={() => append({ fullName: "", phone: "", email: "" })}
+        />
       }
     />
   );

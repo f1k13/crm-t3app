@@ -15,7 +15,7 @@ const CreateFormCompany = () => {
     resolver: zodResolver(companyCreateSchema),
     defaultValues: {
       name: "",
-      inn: 0,
+      inn: "",
       comment: "",
       phoneNumbers: undefined,
       emails: undefined,
@@ -30,7 +30,6 @@ const CreateFormCompany = () => {
   const onSubmit = (data: TCreateCompany) => {
     create.mutate({
       ...data,
-      inn: Number(data.inn),
       phoneNumbers: data.phoneNumbers?.map((it) => it.value),
       emails: data.emails?.map((it) => it.value),
     });

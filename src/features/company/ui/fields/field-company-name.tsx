@@ -2,7 +2,7 @@ import { Autocomplete, AutocompleteItem } from "@heroui/react";
 import { debounce } from "lodash";
 import { Search } from "lucide-react";
 import { useCallback, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 import { useSuggestCompany } from "~/entities/company/hooks/use-suggest-company";
 import { useCompanyStore } from "~/entities/company/model/store";
 import { CompanyTypeEnum } from "~/server/api/enums/company-enum";
@@ -12,15 +12,16 @@ type TArgsFunc = {
   inn: string;
 };
 const FieldCompanyName = () => {
-  const { setValue, watch } = useFormContext();
+  const { setValue } = useFormContext();
 
-  const isDisabled = watch("type") === CompanyTypeEnum.NP;
+  const type = useWatch({ name: "type" }) as CompanyTypeEnum;
+  const isDisabled = type === CompanyTypeEnum.NP;
 
   const { query, setQuery } = useCompanyStore((state) => state);
   const [querySearch, setQuerySearch] = useState("");
   const setNameInnCompany = (data: TArgsFunc) => {
     setValue("name", data.value);
-    setValue("inn", parseInt(data.inn));
+    setValue("inn", data.inn);
   };
   const onChangeDebounce = useCallback(
     debounce((value: string) => {
@@ -61,7 +62,7 @@ const FieldCompanyName = () => {
           onPress={() =>
             setNameInnCompany({
               value: company.value,
-              inn: company.data.inn,
+              inn: String(company.data.inn),
             })
           }
           key={`${company.value}-${company.data.inn}-${Date.now()}-${company.data.ogrn}`}

@@ -1,18 +1,21 @@
-import { Button, Input } from "@heroui/react";
-import { Plus, Trash2 } from "lucide-react";
+import { Input } from "@heroui/react";
+import { Trash2 } from "lucide-react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import type { TCompanyFormValues } from "~/entities/company/model/company.model";
 import { FlexItemsCenterG2 } from "~/shared/ui/templates/common";
 import { FieldsCompanyTemplate } from "~/shared/ui/templates/company";
+import AppendButton from "./append-button";
 
-const FieldsEmailCompany = () => {
-  const { control, formState, register } = useFormContext<TCompanyFormValues>();
+const FieldsEmailCompany = ({ onRemove }: { onRemove: () => void }) => {
+  const { formState, register } = useFormContext<TCompanyFormValues>();
 
   const { fields, append, remove } = useFieldArray({
-    control,
     name: "emails",
   });
-
+  const handleRemove = (index: number) => {
+    remove(index);
+    if (fields.length === 1) onRemove();
+  };
   return (
     <FieldsCompanyTemplate
       title={
@@ -31,7 +34,7 @@ const FieldsEmailCompany = () => {
                 placeholder="example@gmail.com"
                 endContent={
                   <Trash2
-                    onClick={() => remove(index)}
+                    onClick={() => handleRemove(index)}
                     className="h-4 w-4 cursor-pointer text-danger-500"
                   />
                 }
@@ -40,16 +43,7 @@ const FieldsEmailCompany = () => {
           ))}
         </>
       }
-      append={
-        <Button
-          color={"success"}
-          onPress={() => append({ value: "" })}
-          variant={"flat"}
-          isIconOnly
-        >
-          <Plus />
-        </Button>
-      }
+      append={<AppendButton onClick={() => append({ value: "" })} />}
     />
   );
 };

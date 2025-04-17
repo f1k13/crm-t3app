@@ -1,8 +1,7 @@
 import { Button, Divider, Form } from "@heroui/react";
-import React from "react";
+import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import type { TCompanyFormValues } from "~/entities/company/model/company.model";
-import If from "~/features/abstract/if";
 import {
   AddFieldButton,
   FieldArea,
@@ -25,13 +24,12 @@ type CompanyFormProps = {
 };
 
 const CompanyForm = ({ onSubmit }: CompanyFormProps) => {
-  const { handleSubmit, watch, setValue } =
-    useFormContext<TCompanyFormValues>();
+  const { handleSubmit, setValue } = useFormContext<TCompanyFormValues>();
 
-  const phoneNumbers = watch("phoneNumbers") ?? [];
-  const emails = watch("emails") ?? [];
-  const messengers = watch("messengers") ?? [];
-  const contactPersons = watch("contactPersons") ?? [];
+  const [showPhoneNumbers, setShowPhoneNumbers] = useState(false);
+  const [showEmails, setShowEmails] = useState(false);
+  const [showMessengers, setShowMessengers] = useState(false);
+  const [showContactPersons, setShowContactPersons] = useState(false);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -52,52 +50,60 @@ const CompanyForm = ({ onSubmit }: CompanyFormProps) => {
         <Divider className={"my-4 w-full"} />
 
         <FlexItemsCenterG2>
-          {phoneNumbers.length === 0 && (
+          {!showPhoneNumbers && (
             <AddFieldButton
-              onClick={() => setValue("phoneNumbers", [{ value: "" }])}
+              onClick={() => {
+                setShowPhoneNumbers(true);
+                setValue("phoneNumbers", [{ value: "" }]);
+              }}
               text={"Добавить телефон"}
             />
           )}
-          {emails.length === 0 && (
+          {!showEmails && (
             <AddFieldButton
-              onClick={() => setValue("emails", [{ value: "" }])}
+              onClick={() => {
+                setShowEmails(true);
+                setValue("emails", [{ value: "" }]);
+              }}
               text={"Добавить email"}
             />
           )}
-          {messengers.length === 0 && (
+          {!showMessengers && (
             <AddFieldButton
-              onClick={() =>
-                setValue("messengers", [{ type: "", contact: "" }])
-              }
+              onClick={() => {
+                setShowMessengers(true);
+                setValue("messengers", [{ type: "", contact: "" }]);
+              }}
               text={"Добавить мессенджер"}
             />
           )}
-          {contactPersons.length === 0 && (
+          {!showContactPersons && (
             <AddFieldButton
-              onClick={() =>
+              onClick={() => {
+                setShowContactPersons(true);
                 setValue("contactPersons", [
                   { fullName: "", phone: "", email: "" },
-                ])
-              }
+                ]);
+              }}
               text={"Добавить контактное лицо"}
             />
           )}
         </FlexItemsCenterG2>
 
-        <If condition={phoneNumbers.length > 0}>
-          <FieldsPhoneNumber />
-        </If>
-        <If condition={emails.length > 0}>
-          <FieldsEmailCompany />
-        </If>
-        <If condition={messengers.length > 0}>
-          <FieldsMessengersCompany />
-        </If>
-        <If condition={contactPersons.length > 0}>
-          <FieldsPersonsCompany />
-        </If>
-        <Divider className={"my-4 w-full"} />
+        {showPhoneNumbers && (
+          <FieldsPhoneNumber onRemove={() => setShowPhoneNumbers(false)} />
+        )}
+        {showEmails && (
+          <FieldsEmailCompany onRemove={() => setShowEmails(false)} />
+        )}
+        {showMessengers && (
+          <FieldsMessengersCompany onRemove={() => setShowMessengers(false)} />
+        )}
+        {showContactPersons && (
+          <FieldsPersonsCompany onRemove={() => setShowContactPersons(false)} />
+        )}
 
+        <Divider className={"my-4 w-full"} />
         <FieldArea />
       </CompanyFormTemplate>
     </Form>
