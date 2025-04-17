@@ -9,14 +9,18 @@ const ListSidebar = ({ list }: { list: TSidebar[] }) => {
   return (
     <>
       {list.map((item) => (
-        <SidebarMenuItem key={item.title}>
-          <SidebarMenuButton size={"lg"} isActive={item.link === path}>
-            <Link className={"flex items-center gap-2"} href={item.link}>
+        <Link
+          key={item.title}
+          className={"flex w-full items-center gap-2"}
+          href={item.link}
+        >
+          <SidebarMenuItem className={"w-full"}>
+            <SidebarMenuButton size={"lg"} isActive={item.link === path}>
               <item.icon />
               <span>{item.title}</span>
-            </Link>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </Link>
       ))}
     </>
   );

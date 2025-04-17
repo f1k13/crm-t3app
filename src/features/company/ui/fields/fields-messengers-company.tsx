@@ -53,6 +53,11 @@ const FieldsMessengersCompany = ({ onRemove }: { onRemove: () => void }) => {
     remove(index);
     if (fields.length === 1) onRemove();
   };
+  const isTypeError = (index: number) =>
+    !!formState?.errors?.messengers?.[index]?.type;
+
+  const isSelected = (index: number, key: TMessengerKey) =>
+    value?.[index]?.type === key;
   return (
     <FieldsCompanyTemplate
       title={
@@ -90,8 +95,13 @@ const FieldsMessengersCompany = ({ onRemove }: { onRemove: () => void }) => {
                 <Button
                   key={it.label}
                   isIconOnly
-                  variant={
-                    value?.[index]?.type === it.key ? "flat" : "bordered"
+                  variant={isSelected(index, it.key) ? "flat" : "bordered"}
+                  color={
+                    isSelected(index, it.key)
+                      ? "primary"
+                      : isTypeError(index)
+                        ? "danger"
+                        : "default"
                   }
                   onPress={() => setType(index, it.key)}
                 >
