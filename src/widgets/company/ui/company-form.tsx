@@ -18,6 +18,7 @@ import {
   CompanyFormTemplate,
   FieldsRowCompanyTemplate,
 } from "~/shared/ui/templates/company";
+import { useAnswerCompany } from "../hooks/use-answer-company";
 
 type CompanyFormProps = {
   onSubmit: (data: TCompanyFormValues) => void;
@@ -30,7 +31,7 @@ const CompanyForm = ({ onSubmit }: CompanyFormProps) => {
   const [showEmails, setShowEmails] = useState(false);
   const [showMessengers, setShowMessengers] = useState(false);
   const [showContactPersons, setShowContactPersons] = useState(false);
-
+  useAnswerCompany();
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <CompanyFormTemplate

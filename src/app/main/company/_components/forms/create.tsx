@@ -23,6 +23,7 @@ const CreateFormCompany = () => {
       contactPersons: undefined,
       areaId: "",
       type: CompanyTypeEnum.LB,
+      answerId: "",
     },
   });
 

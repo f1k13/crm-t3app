@@ -1,5 +1,5 @@
 import { Drawer, DrawerBody, DrawerContent, DrawerHeader } from "@heroui/react";
-import CreateFormCompany from "./forms/create";
+import CreateFormCompany from "../forms/create";
 
 const CreateCompany = ({
   isOpen,

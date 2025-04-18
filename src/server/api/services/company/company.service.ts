@@ -1,7 +1,11 @@
-import type { TCreateCompanyInput } from "../../dto/company/company.dto";
+import type {
+  TCreateCompanyInput,
+  TGetMyCompanyInput,
+} from "../../dto/company/company.dto";
 import type { TContext } from "../../trpc";
 import { companyRepository } from "../../repository/company/company.repository";
 import { TRPCError } from "@trpc/server";
+import { groupBy } from "../../utils/group-by";
 
 export const companyService = {
   async createCompany(ctx: TContext, data: TCreateCompanyInput) {
@@ -49,5 +53,62 @@ export const companyService = {
         contactPersons: data.contactPersons,
       });
     }
+  },
+  async getCompanies(ctx: TContext, input: TGetMyCompanyInput) {
+    const payload = {
+      ...input,
+      answerId: ctx.userId,
+    };
+
+    const companies = await companyRepository.getCompanies(ctx.db, payload);
+
+    const companyIds = companies
+      .filter((it) => it.id !== null)
+      .map((c) => c.id);
+
+    const [phones, emails, messengers, contacts] = await Promise.all([
+      companyRepository.getPhonesCompanyByCompanyIds(ctx.db, companyIds),
+      companyRepository.getEmailsCompanyByCompanyIds(ctx.db, companyIds),
+      companyRepository.getMessengersCompanyByCompanyIds(ctx.db, companyIds),
+      companyRepository.getPersonsCompanyByCompanyIds(ctx.db, companyIds),
+    ]);
+
+    type TPhone = (typeof phones)[number];
+    type TEmail = (typeof emails)[number];
+    type TMessenger = (typeof messengers)[number];
+    type TContact = (typeof contacts)[number];
+
+    const phonesGrouped: Record<string, TPhone[]> = groupBy(
+      phones.filter((p) => p.companyId),
+      (p) => p.companyId,
+    );
+    const emailsGrouped: Record<string, TEmail[]> = groupBy(
+      emails.filter((e) => e.companyId),
+      (e) => e.companyId,
+    );
+    const messengersGrouped: Record<string, TMessenger[]> = groupBy(
+      messengers.filter((m) => m.companyId),
+      (m) => m.companyId,
+    );
+    const contactsGrouped: Record<string, TContact[]> = groupBy(
+      contacts.filter((c) => c.companyId),
+      (c) => c.companyId,
+    );
+
+    const fullCompanies = companies.map((company) => {
+      const companyId = company.id;
+
+      return {
+        company: company,
+        phones: phonesGrouped[companyId] ?? null,
+        emails: emailsGrouped[companyId] ?? null,
+        messengers: messengersGrouped[companyId] ?? null,
+        contacts: contactsGrouped[companyId] ?? null,
+      };
+    });
+
+    return {
+      data: fullCompanies,
+    };
   },
 };

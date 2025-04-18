@@ -10,10 +10,11 @@ import {
   type TCreateCompanyInput,
   type TCreateEmailInput,
   type TCreatePhoneNumberInput,
+  type TGetMyCompanyInput,
   type TMessengerCreate,
 } from "../../dto/company/company.dto";
 import type { TDrizzleDatabase } from "../repository";
-import { eq } from "drizzle-orm";
+import { eq, ilike, inArray, or, and, asc } from "drizzle-orm";
 
 export const companyRepository = {
   async create(db: TDrizzleDatabase, dto: TCreateCompanyInput) {
@@ -23,6 +24,7 @@ export const companyRepository = {
       type: dto.type,
       comment: dto.comment,
       areaId: dto.areaId,
+      answerId: dto.answerId,
     };
 
     const [company] = await db
@@ -93,5 +95,62 @@ export const companyRepository = {
     return {
       data,
     };
+  },
+  async getCompanies(
+    db: TDrizzleDatabase,
+    dto: TGetMyCompanyInput & { answerId: string },
+  ) {
+    const { query, areaIds, answerId, typesCompany, page, limit } = dto;
+    const offset = (page - 1) * limit;
+    const conditions = [];
+
+    if (query) {
+      conditions.push(
+        or(
+          ilike(companySchema.name, `%${query}%`),
+          ilike(companySchema.inn, `%${query}%`),
+        ),
+      );
+    }
+
+    if (areaIds && areaIds.length > 0) {
+      conditions.push(inArray(companySchema.areaId, areaIds));
+    }
+    if (typesCompany && typesCompany.length > 0) {
+      conditions.push(inArray(companySchema.type, typesCompany));
+    }
+    conditions.push(eq(companySchema.answerId, answerId));
+    const data = await db
+      .select()
+      .from(companySchema)
+      .where(and(...conditions))
+      .orderBy(asc(companySchema.createdAt))
+      .limit(limit)
+      .offset(offset);
+    return data;
+  },
+  async getPhonesCompanyByCompanyIds(db: TDrizzleDatabase, ids: string[]) {
+    return await db
+      .select()
+      .from(phoneNumberSchema)
+      .where(inArray(phoneNumberSchema.companyId, ids));
+  },
+  async getEmailsCompanyByCompanyIds(db: TDrizzleDatabase, ids: string[]) {
+    return await db
+      .select()
+      .from(emailSchema)
+      .where(inArray(emailSchema.companyId, ids));
+  },
+  async getMessengersCompanyByCompanyIds(db: TDrizzleDatabase, ids: string[]) {
+    return await db
+      .select()
+      .from(messengerSchema)
+      .where(inArray(messengerSchema.companyId, ids));
+  },
+  async getPersonsCompanyByCompanyIds(db: TDrizzleDatabase, ids: string[]) {
+    return await db
+      .select()
+      .from(contactPersonSchema)
+      .where(inArray(contactPersonSchema.companyId, ids));
   },
 };

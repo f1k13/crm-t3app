@@ -12,7 +12,7 @@ export const companyCreateSchema = z.object({
       CompanyTypeEnum.SC,
     ])
     .optional(),
-
+  answerId: z.string().min(1),
   comment: z.string().optional(),
   areaId: z.string().optional(),
   phoneNumbers: z
@@ -95,6 +95,69 @@ export const companyDataType = [
     label: "ГОС компания",
   },
 ];
+
+export const companyDataSchema = z.object({
+  company: z.object({
+    id: z.string().min(1),
+    name: z.string().min(1),
+    inn: z.string().nullable(),
+    type: z.nativeEnum(CompanyTypeEnum).nullable(),
+    comment: z.string().nullable(),
+    areaId: z.string().nullable(),
+    answerId: z.string().nullable(),
+    createdAt: z.date(),
+  }),
+
+  phones: z
+    .array(
+      z.object({
+        phoneNumber: z.string(),
+        companyId: z.string(),
+        createdAt: z.date(),
+        id: z.string().min(1),
+      }),
+    )
+    .nullable(),
+
+  emails: z
+    .array(
+      z.object({
+        email: z.string(),
+        companyId: z.string(),
+        createdAt: z.date(),
+        id: z.string().min(1),
+      }),
+    )
+    .nullable(),
+
+  messengers: z
+    .array(
+      z.object({
+        type: z.string(),
+        contact: z.string(),
+        companyId: z.string(),
+        createdAt: z.date(),
+        id: z.string().min(1),
+      }),
+    )
+    .nullable(),
+
+  contacts: z
+    .array(
+      z.object({
+        fullName: z.string(),
+        phone: z.string(),
+        email: z.string(),
+        companyId: z.string(),
+        createdAt: z.date(),
+        id: z.string().min(1),
+      }),
+    )
+    .nullable(),
+});
+
+export type TCompanyData = z.infer<typeof companyDataSchema>;
+
 export type TCreateCompany = z.infer<typeof companyCreateSchema>;
 
 export type TCompanyFormValues = TCreateCompany;

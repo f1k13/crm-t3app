@@ -1,5 +1,6 @@
 import {
   companyCreateSchema,
+  getMyCompany,
   suggestDaDataCompanySchema,
 } from "../../dto/company/company.dto";
 import { companyService } from "../../services/company/company.service";
@@ -15,4 +16,9 @@ export const companyRouter = createTRPCRouter({
   suggestCompany: protectedProcedure
     .input(suggestDaDataCompanySchema)
     .query(async ({ input }) => await daDataService.suggestSearch(input)),
+  getAllCompanies: protectedProcedure
+    .input(getMyCompany)
+    .query(
+      async ({ ctx, input }) => await companyService.getCompanies(ctx, input),
+    ),
 });

@@ -14,7 +14,7 @@ export const companyCreateSchema = z.object({
     .optional(),
   areaId: z.string().optional(),
   comment: z.string().optional(),
-
+  answerId: z.string().min(1, "answerId is required"),
   phoneNumbers: z
     .array(z.string().min(1, "phone number is required"))
     .optional(),
@@ -73,6 +73,25 @@ export const contactPersonCompany = z.object({
   ),
 });
 
+export const getCompanies = z.object({
+  query: z.string().optional(),
+  areaIds: z.array(z.string().min(1, "areaIds is req")).optional(),
+  typesCompany: z
+    .array(
+      z.enum([
+        CompanyTypeEnum.IE,
+        CompanyTypeEnum.LB,
+        CompanyTypeEnum.NP,
+        CompanyTypeEnum.SC,
+      ]),
+    )
+    .optional(),
+  page: z.number().min(1).default(1),
+  limit: z.number().min(1).default(10),
+});
+
+export const getMyCompany = getCompanies.extend({});
+
 export type TCreateCompanyInput = z.infer<typeof companyCreateSchema>;
 
 export type TCreatePhoneNumberInput = z.infer<typeof phoneNumberCompanySchema>;
@@ -84,3 +103,5 @@ export type TMessengerCreate = z.infer<typeof messengerCompanySchema>;
 export type TContactPersonCreate = z.infer<typeof contactPersonCompany>;
 
 export type TSuggestCompanyInput = z.infer<typeof suggestDaDataCompanySchema>;
+
+export type TGetMyCompanyInput = z.infer<typeof getMyCompany>;

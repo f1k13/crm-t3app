@@ -17,7 +17,7 @@ const FieldCompanyName = () => {
   const type = useWatch({ name: "type" }) as CompanyTypeEnum;
   const isDisabled = type === CompanyTypeEnum.NP;
 
-  const { query, setQuery } = useCompanyStore((state) => state);
+  const { querySuggest, setQuerySuggest } = useCompanyStore((state) => state);
   const [querySearch, setQuerySearch] = useState("");
   const setNameInnCompany = (data: TArgsFunc) => {
     setValue("name", data.value);
@@ -25,9 +25,9 @@ const FieldCompanyName = () => {
   };
   const onChangeDebounce = useCallback(
     debounce((value: string) => {
-      setQuery(value);
+      setQuerySuggest(value);
     }, 800),
-    [setQuery],
+    [setQuerySuggest],
   );
 
   const handleChange = (value: string) => {
@@ -35,7 +35,7 @@ const FieldCompanyName = () => {
     onChangeDebounce(value);
   };
 
-  const { data, isLoading } = useSuggestCompany({ query });
+  const { data, isLoading } = useSuggestCompany({ query: querySuggest });
 
   return (
     <Autocomplete
