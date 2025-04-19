@@ -106,6 +106,11 @@ export const companyDataSchema = z.object({
     areaId: z.string().nullable(),
     answerId: z.string().nullable(),
     createdAt: z.date(),
+    area: z
+      .object({
+        name: z.string(),
+      })
+      .nullable(),
   }),
 
   phones: z
@@ -142,7 +147,7 @@ export const companyDataSchema = z.object({
     )
     .nullable(),
 
-  contacts: z
+  persons: z
     .array(
       z.object({
         fullName: z.string(),

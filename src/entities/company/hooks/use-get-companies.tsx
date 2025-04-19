@@ -3,6 +3,7 @@ import { api } from "~/trpc/react";
 type TArgsUseGetCompanies = {
   page: number;
   limit: number;
+  query: string;
 };
 
 export function useGetCompanies(args: TArgsUseGetCompanies) {

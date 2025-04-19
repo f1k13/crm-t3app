@@ -7,7 +7,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
     <SidebarProvider>
       <div className={"flex h-screen w-screen"}>
         <AppSidebar />
-        <div className={"w-full px-4 py-6"}>{children}</div>
+        <div className={"w-full px-4 py-20"}>{children}</div>
       </div>
     </SidebarProvider>
   );

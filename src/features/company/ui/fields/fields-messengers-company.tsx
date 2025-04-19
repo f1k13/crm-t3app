@@ -7,11 +7,11 @@ import {
   useFormContext,
   useWatch,
 } from "react-hook-form";
-import { SiTelegram, SiViber, SiWhatsapp } from "react-icons/si";
 import type { TCompanyFormValues } from "~/entities/company/model/company.model";
 import { FieldsCompanyTemplate } from "~/shared/ui/templates/company";
 import FieldsRowCompany from "~/shared/ui/templates/company/fields-row-company";
 import AppendButton from "./append-button";
+import { messengerIcons } from "../../model/messenger.model";
 export type TMessengerKey = "telegram" | "whatsapp" | "viber";
 type TMessengerOpt = {
   key: TMessengerKey;
@@ -24,11 +24,6 @@ const messengerOptions: TMessengerOpt[] = [
   { key: "viber", label: "Viber" },
 ];
 
-const messengerIcons: Record<TMessengerKey, JSX.Element> = {
-  telegram: <SiTelegram className="h-5 w-5 text-[#0088cc]" />,
-  whatsapp: <SiWhatsapp className="h-5 w-5 text-[#25D366]" />,
-  viber: <SiViber className="h-5 w-5 text-[#665CAC]" />,
-};
 const FieldsMessengersCompany = ({ onRemove }: { onRemove: () => void }) => {
   const { control, setValue, formState } = useFormContext<TCompanyFormValues>();
 

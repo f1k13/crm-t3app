@@ -4,3 +4,5 @@ export { default as FlexItemsCenter } from "./flex-items-center";
 export { default as FlexItemsCenterG2 } from "./flex-items-center-g-2";
 export { default as FlexItemsJustify } from "./flex-items-justify";
 export { default as FlexCol } from "./flex-col";
+export { default as FlexWrapJustify } from "./flex-wrap-justify";
+export { default as FlexColG4 } from "./flex-col-g-4";

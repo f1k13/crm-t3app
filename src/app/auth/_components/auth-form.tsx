@@ -33,7 +33,7 @@ const AuthForm = () => {
         error={form.formState.errors.password?.message}
       />
       <Button color={"primary"} className={"w-full"} type={"submit"}>
-        {signIn.isPending ? <Spinner /> : "Логин"}
+        {signIn.isPending ? <Spinner color={"current"} /> : "Логин"}
       </Button>
     </Form>
   );

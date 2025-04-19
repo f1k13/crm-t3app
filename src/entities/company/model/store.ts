@@ -6,6 +6,8 @@ type TState = {
   setQuerySuggest: (value: string) => void;
   list: TCompanyData[];
   setList: (data: TCompanyData[]) => void;
+  query: string;
+  setQuery: (query: string) => void;
 };
 
 export const useCompanyStore = create<TState>((set) => ({
@@ -13,4 +15,6 @@ export const useCompanyStore = create<TState>((set) => ({
   setQuerySuggest: (querySuggest) => set({ querySuggest }),
   list: [],
   setList: (list) => set({ list }),
+  query: "",
+  setQuery: (query) => set({ query }),
 }));

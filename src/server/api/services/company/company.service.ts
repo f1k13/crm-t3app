@@ -63,8 +63,8 @@ export const companyService = {
     const companies = await companyRepository.getCompanies(ctx.db, payload);
 
     const companyIds = companies
-      .filter((it) => it.id !== null)
-      .map((c) => c.id);
+      .filter((it) => it.company.id !== null)
+      .map((c) => c.company.id);
 
     const [phones, emails, messengers, contacts] = await Promise.all([
       companyRepository.getPhonesCompanyByCompanyIds(ctx.db, companyIds),
@@ -95,15 +95,18 @@ export const companyService = {
       (c) => c.companyId,
     );
 
-    const fullCompanies = companies.map((company) => {
+    const fullCompanies = companies.map(({ company, area }) => {
       const companyId = company.id;
 
       return {
-        company: company,
+        company: {
+          ...company,
+          area,
+        },
         phones: phonesGrouped[companyId] ?? null,
         emails: emailsGrouped[companyId] ?? null,
         messengers: messengersGrouped[companyId] ?? null,
-        contacts: contactsGrouped[companyId] ?? null,
+        persons: contactsGrouped[companyId] ?? null,
       };
     });
 

@@ -14,7 +14,8 @@ import {
   type TMessengerCreate,
 } from "../../dto/company/company.dto";
 import type { TDrizzleDatabase } from "../repository";
-import { eq, ilike, inArray, or, and, asc } from "drizzle-orm";
+import { eq, ilike, inArray, or, and, desc } from "drizzle-orm";
+import { areaSchema } from "~/server/db/schemas/area.schema";
 
 export const companyRepository = {
   async create(db: TDrizzleDatabase, dto: TCreateCompanyInput) {
@@ -121,12 +122,19 @@ export const companyRepository = {
     }
     conditions.push(eq(companySchema.answerId, answerId));
     const data = await db
-      .select()
+      .select({
+        company: companySchema,
+        area: {
+          name: areaSchema.name,
+        },
+      })
       .from(companySchema)
+      .leftJoin(areaSchema, eq(companySchema.areaId, areaSchema.id))
       .where(and(...conditions))
-      .orderBy(asc(companySchema.createdAt))
+      .orderBy(desc(companySchema.createdAt))
       .limit(limit)
       .offset(offset);
+
     return data;
   },
   async getPhonesCompanyByCompanyIds(db: TDrizzleDatabase, ids: string[]) {

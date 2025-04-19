@@ -1,6 +1,7 @@
 import { addToast } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { MAIN_LINK } from "~/shared/constants/links";
+import { setCookie } from "~/shared/cookies/cookie";
 import { api } from "~/trpc/react";
 
 export function useAuth() {
@@ -14,7 +15,7 @@ export function useAuth() {
         description: "Успешный вход в систему",
         color: "success",
       });
-      document.cookie = `token=${data.token}; path=/`;
+      setCookie(data.token);
       router.push(MAIN_LINK);
     },
     onError: async (data) => {
